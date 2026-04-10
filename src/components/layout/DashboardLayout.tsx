@@ -1,15 +1,17 @@
+import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   Home,
-  Package,
-  ClipboardList,
+  List,
+  ArrowDownToLine,
   Inbox,
   UserCheck,
   BadgeDollarSign,
   LogOut,
   Recycle,
   ChevronsUpDown,
+  User,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
@@ -43,24 +45,27 @@ import {
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 
+import ProfileModal from '@/components/shared/ProfileModal';
+
 // ── Navigation menu items per role ──────────────────────────
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ElementType;
+  /** If true, match pathname with startsWith instead of exact */
+  matchPrefix?: boolean;
 }
 
 const NAV_ITEMS: Record<UserRole, NavItem[]> = {
   customers: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
-    { label: 'Request Penjemputan', href: '/dashboard/request', icon: Package },
-    { label: 'Riwayat Transaksi', href: '/dashboard/history', icon: ClipboardList },
+    { label: 'Daftar Limbah', href: '/dashboard/waste-list', icon: List },
+    { label: 'Setor Sampah', href: '/dashboard/deposit', icon: ArrowDownToLine, matchPrefix: true },
   ],
   partners: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
     { label: 'Order Masuk', href: '/dashboard/orders', icon: Inbox },
-    { label: 'Riwayat Transaksi', href: '/dashboard/history', icon: ClipboardList },
   ],
   admin: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
@@ -92,6 +97,7 @@ function getInitials(name: string): string {
 export default function DashboardLayout() {
   const { profile, logout } = useAuthStore();
   const location = useLocation();
+  const [showProfile, setShowProfile] = useState(false);
 
   const navItems = NAV_ITEMS[profile?.role ?? 'customers'];
   const roleLabel = ROLE_LABELS[profile?.role ?? 'customers'];
@@ -99,6 +105,14 @@ export default function DashboardLayout() {
   const handleLogout = async () => {
     await logout();
     toast.success('Berhasil keluar. Sampai jumpa!');
+  };
+
+  /** Check if a nav item is active */
+  const isNavActive = (item: NavItem): boolean => {
+    if (item.matchPrefix) {
+      return location.pathname.startsWith(item.href);
+    }
+    return location.pathname === item.href;
   };
 
   return (
@@ -132,15 +146,15 @@ export default function DashboardLayout() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {navItems.map((item) => {
-                    const isActive = location.pathname === item.href;
+                    const active = isNavActive(item);
                     return (
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                           asChild
-                          isActive={isActive}
+                          isActive={active}
                           tooltip={item.label}
                           className={
-                            isActive
+                            active
                               ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800'
                               : 'text-gray-600 hover:bg-emerald-50/60 hover:text-emerald-700'
                           }
@@ -200,6 +214,15 @@ export default function DashboardLayout() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
+                      id="btn-profile"
+                      onClick={() => setShowProfile(true)}
+                      className="cursor-pointer text-gray-700 focus:bg-emerald-50 focus:text-emerald-700"
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      Profil Saya
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
                       id="btn-logout"
                       onClick={handleLogout}
                       className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700"
@@ -224,7 +247,7 @@ export default function DashboardLayout() {
             <Separator orientation="vertical" className="mr-2 h-4 bg-gray-200" />
             <div className="flex flex-1 items-center justify-between">
               <h2 className="text-sm font-medium text-gray-500">
-                {navItems.find((item) => item.href === location.pathname)?.label ?? 'Dashboard'}
+                {navItems.find((item) => isNavActive(item))?.label ?? 'Dashboard'}
               </h2>
             </div>
           </header>
@@ -235,6 +258,9 @@ export default function DashboardLayout() {
           </div>
         </SidebarInset>
       </SidebarProvider>
+
+      {/* Profile Modal */}
+      <ProfileModal open={showProfile} onOpenChange={setShowProfile} />
     </TooltipProvider>
   );
 }

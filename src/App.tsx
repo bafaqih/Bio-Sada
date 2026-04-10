@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Loader2, Recycle } from 'lucide-react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/stores/authStore';
 
@@ -13,6 +14,23 @@ import RegisterPage from '@/pages/auth/RegisterPage';
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import DashboardHome from '@/pages/dashboard/DashboardHome';
+
+// Nasabah pages
+import WasteListPage from '@/pages/dashboard/nasabah/WasteListPage';
+import DepositPage from '@/pages/dashboard/nasabah/DepositPage';
+import DepositRequestPage from '@/pages/dashboard/nasabah/DepositRequestPage';
+import DepositHistoryPage from '@/pages/dashboard/nasabah/DepositHistoryPage';
+
+// ── Query Client ─────────────────────────────────────────────
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
 // ── Temporary landing page (will be replaced later) ─────────
 
@@ -72,7 +90,7 @@ function NotFoundPage() {
 
 // ── Main App ────────────────────────────────────────────────
 
-function App() {
+function AppRoutes() {
   const { isInitialized, initializeAuth } = useAuthStore();
 
   useEffect(() => {
@@ -103,10 +121,19 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Protected dashboard routes — any authenticated role */}
+        {/* Protected dashboard routes — all authenticated roles */}
         <Route element={<ProtectedRoute allowedRoles={['admin', 'partners', 'customers']} />}>
           <Route element={<DashboardLayout />}>
+            {/* Shared dashboard home (shows role-specific content) */}
             <Route path="/dashboard" element={<DashboardHome />} />
+
+            {/* Customer-specific routes */}
+            <Route path="/dashboard/waste-list" element={<WasteListPage />} />
+            <Route path="/dashboard/deposit" element={<DepositPage />}>
+              <Route index element={<Navigate to="request" replace />} />
+              <Route path="request" element={<DepositRequestPage />} />
+              <Route path="history" element={<DepositHistoryPage />} />
+            </Route>
           </Route>
         </Route>
 
@@ -114,6 +141,14 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppRoutes />
+    </QueryClientProvider>
   );
 }
 

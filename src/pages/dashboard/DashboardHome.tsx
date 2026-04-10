@@ -1,29 +1,35 @@
 import { useAuthStore } from '@/stores/authStore';
+import { useCustomerStats } from '@/hooks/useCustomerStats';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Recycle, Leaf, TrendingUp } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Recycle, Wallet, ClipboardCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 /**
- * Placeholder dashboard home page.
- * Shows a role-aware greeting and summary cards.
- * Will be replaced by role-specific dashboards in later phases.
+ * Dashboard home page with real stats for customers.
+ * Shows greeting + 3 stat cards fetched via TanStack Query.
  */
 export default function DashboardHome() {
   const { profile } = useAuthStore();
+  const { data: stats, isLoading } = useCustomerStats(profile?.id);
 
-  /** Map role to Indonesian display label */
   const roleLabel: Record<string, string> = {
     customers: 'Nasabah',
     partners: 'Mitra Pengepul',
     admin: 'Administrator',
   };
 
+  /** Format number to Indonesian locale */
+  const formatNumber = (num: number) =>
+    new Intl.NumberFormat('id-ID').format(num);
+
+  /** Format currency to Rupiah */
+  const formatCurrency = (num: number) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   const itemVariants = {
@@ -51,55 +57,76 @@ export default function DashboardHome() {
         </p>
       </motion.div>
 
-      {/* Summary Cards */}
+      {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Card 1: Total Setoran Sampah */}
         <motion.div variants={itemVariants}>
           <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">
-                Total Setoran
+                Total Setoran Sampah
               </CardTitle>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
                 <Recycle className="h-5 w-5" />
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gray-900">0 kg</p>
-              <p className="mt-1 text-xs text-gray-400">Data akan tampil setelah ada transaksi</p>
+              {isLoading ? (
+                <Skeleton className="h-8 w-24" />
+              ) : (
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatNumber(stats?.totalWeight ?? 0)} kg
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-400">Akumulasi dari transaksi selesai</p>
             </CardContent>
           </Card>
         </motion.div>
 
+        {/* Card 2: Estimasi Saldo */}
         <motion.div variants={itemVariants}>
           <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">
-                Transaksi Aktif
+                Estimasi Saldo
               </CardTitle>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-100 text-teal-600">
-                <TrendingUp className="h-5 w-5" />
+                <Wallet className="h-5 w-5" />
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gray-900">0</p>
-              <p className="mt-1 text-xs text-gray-400">Belum ada transaksi berjalan</p>
+              {isLoading ? (
+                <Skeleton className="h-8 w-32" />
+              ) : (
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatCurrency(stats?.totalEarnings ?? 0)}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-400">Total pendapatan dari penjualan</p>
             </CardContent>
           </Card>
         </motion.div>
 
+        {/* Card 3: Total Transaksi */}
         <motion.div variants={itemVariants}>
           <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">
-                Dampak Lingkungan
+                Total Transaksi
               </CardTitle>
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-100 text-green-600">
-                <Leaf className="h-5 w-5" />
+                <ClipboardCheck className="h-5 w-5" />
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gray-900">🌱</p>
-              <p className="mt-1 text-xs text-gray-400">Mulai setor sampah untuk dampak nyata!</p>
+              {isLoading ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatNumber(stats?.totalTransactions ?? 0)}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-400">Transaksi yang telah selesai</p>
             </CardContent>
           </Card>
         </motion.div>
