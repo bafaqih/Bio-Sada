@@ -33,7 +33,7 @@ export default function LoginPage() {
     // Email Verified Toast Injection
     const params = new URLSearchParams(location.search);
     if (params.get('verified') === 'true') {
-      toast.success('Akun berhasil terverifikasi, silakan masuk');
+      toast.success('Akun berhasil terverifikasi, silakan masuk', { id: 'verified-toast' });
       // Clean up URL to prevent repeat toasts on manual refresh
       const cleanUrl = window.location.pathname;
       window.history.replaceState({}, document.title, cleanUrl);

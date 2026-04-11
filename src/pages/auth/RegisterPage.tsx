@@ -116,14 +116,14 @@ export default function RegisterPage() {
     const randomSuffix = Math.floor(1000000 + Math.random() * 9000000);
     const generatedUsername = `user${randomSuffix}`;
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.email.trim(),
       password: form.password,
       options: {
         data: {
           full_name: form.namaLengkap.trim(),
           role: form.role,
-          phone: `62${form.nomorTelepon.trim()}`,
+          phone_number: `62${form.nomorTelepon.trim()}`,
           username: generatedUsername,
         },
         emailRedirectTo: `${window.location.origin}/login?verified=true`,
@@ -134,6 +134,12 @@ export default function RegisterPage() {
 
     if (error) {
       toast.error('Pendaftaran gagal: ' + error.message);
+      return;
+    }
+
+    // Supabase default protection: jika akun sudah ada, signUp mengembalikan success tapi dengan 'identities' kosong
+    if (data?.user?.identities && data.user.identities.length === 0) {
+      toast.error('Email ini sudah terdaftar! Silakan masuk ke akun Anda.');
       return;
     }
 
@@ -172,24 +178,26 @@ export default function RegisterPage() {
         className="relative z-10 w-full max-w-2xl"
       >
         <Card className="border-emerald-100/60 bg-white/80 shadow-xl shadow-emerald-900/5 backdrop-blur-sm">
-          <CardHeader className="items-center text-center">
-            {/* Logo / Ikon */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
-              className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25"
-            >
-              <Recycle className="h-8 w-8 text-white" />
-            </motion.div>
+          {!showVerificationView && (
+            <CardHeader className="items-center text-center">
+              {/* Logo / Ikon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
+                className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25"
+              >
+                <Recycle className="h-8 w-8 text-white" />
+              </motion.div>
 
-            <CardTitle className="text-2xl font-bold tracking-tight text-gray-900">
-              Buat Akun Bio-Sada
-            </CardTitle>
-            <CardDescription className="text-gray-500">
-              Daftar untuk mulai mengelola sampah secara digital
-            </CardDescription>
-          </CardHeader>
+              <CardTitle className="text-2xl font-bold tracking-tight text-gray-900">
+                Buat Akun Bio-Sada
+              </CardTitle>
+              <CardDescription className="text-gray-500">
+                Daftar untuk mulai mengelola sampah secara digital
+              </CardDescription>
+            </CardHeader>
+          )}
 
           <CardContent>
             {showVerificationView ? (

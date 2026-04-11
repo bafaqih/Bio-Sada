@@ -362,27 +362,28 @@ export default function DashboardLayout() {
       {/* Global No-Address Warning for Customers */}
       {isCustomer && hasNoAddress && (
         <Dialog open={true} onOpenChange={() => {}}>
-          <DialogContent className="sm:max-w-md [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
-            <DialogHeader className="flex flex-col items-center sm:text-center mt-2">
+          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
+            <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-4">
                 <Map className="h-8 w-8 text-amber-600" />
               </div>
-              <DialogTitle className="text-xl font-bold text-gray-900">Alamat Belum Diatur</DialogTitle>
+              <DialogTitle className="text-2xl tracking-tight font-bold text-gray-900">Alamat Belum Diatur</DialogTitle>
             </DialogHeader>
-            <div className="py-2">
-              <p className="text-sm text-gray-500">
+            <div className="pt-1 pb-0">
+              <p className="text-sm leading-relaxed text-gray-500">
                 Profil Anda memerlukan alamat utama untuk dapat melakukan request penjemputan sampah. Harap setel lokasi Anda sekarang.
               </p>
             </div>
-            <DialogFooter className="mt-4 sm:justify-center">
+            <DialogFooter className="mt-4 w-full sm:justify-center">
               <Button
+                size="lg"
                 onClick={() => {
                   setHidePrompt(true);
                   navigate('/dashboard/profile', { state: { openNewAddress: true } });
                 }}
-                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+                className="h-12 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
               >
-                Atur Alamat Sekarang <ChevronRight className="ml-2 h-4 w-4" />
+                Atur Alamat Sekarang <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
             </DialogFooter>
           </DialogContent>
