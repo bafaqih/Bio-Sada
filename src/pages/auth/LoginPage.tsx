@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -18,6 +18,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [tampilkanPassword, setTampilkanPassword] = useState(false);
   const [sedangMemuat, setSedangMemuat] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Load saved email on mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('bioSada_saved_email');
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   // Handler submit login
   const handleLogin = async (e: FormEvent) => {
@@ -41,6 +51,13 @@ export default function LoginPage() {
     if (error) {
       toast.error('Gagal masuk: ' + error.message);
       return;
+    }
+
+    // Save or clear remember me email
+    if (rememberMe) {
+      localStorage.setItem('bioSada_saved_email', email.trim());
+    } else {
+      localStorage.removeItem('bioSada_saved_email');
     }
 
     toast.success('Berhasil masuk! Mengarahkan ke dashboard...');
@@ -133,10 +150,41 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Link Lupa Kata Sandi */}
-              <div className="flex justify-end">
+              {/* Link Lupa Kata Sandi & Ingat Saya */}
+              <div className="flex items-center justify-between">
+                <label className="group flex cursor-pointer items-center gap-2">
+                  <div className="relative flex h-4 w-4 shrink-0 items-center justify-center rounded outline-none transition-all">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    />
+                    {/* Kotak Custom */}
+                    <div
+                      className={`pointer-events-none absolute inset-0 rounded transition-all duration-200 ${
+                        rememberMe
+                          ? 'border-transparent bg-gradient-to-r from-emerald-500 to-teal-600'
+                          : 'border border-gray-300 bg-white group-hover:border-emerald-400'
+                      }`}
+                    />
+                    {/* Centang SVG */}
+                    {rememberMe && (
+                      <svg
+                        className="pointer-events-none relative z-10 h-3 w-3 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-sm tracking-tight text-gray-600">Ingat Saya</span>
+                </label>
                 <Link
-                  to="/lupa-password"
+                  to="/password/reset"
                   id="link-lupa-password"
                   className="text-sm font-medium text-emerald-600 transition-colors hover:text-emerald-700 hover:underline"
                 >
