@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Loader2, Recycle } from 'lucide-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -17,9 +17,9 @@ import DashboardHome from '@/pages/dashboard/DashboardHome';
 
 // Nasabah pages
 import WasteListPage from '@/pages/dashboard/nasabah/WasteListPage';
-import DepositPage from '@/pages/dashboard/nasabah/DepositPage';
 import DepositRequestPage from '@/pages/dashboard/nasabah/DepositRequestPage';
 import DepositHistoryPage from '@/pages/dashboard/nasabah/DepositHistoryPage';
+import ProfilePage from '@/pages/dashboard/nasabah/ProfilePage';
 
 // ── Query Client ─────────────────────────────────────────────
 
@@ -129,11 +129,9 @@ function AppRoutes() {
 
             {/* Customer-specific routes */}
             <Route path="/dashboard/waste-list" element={<WasteListPage />} />
-            <Route path="/dashboard/deposit" element={<DepositPage />}>
-              <Route index element={<Navigate to="request" replace />} />
-              <Route path="request" element={<DepositRequestPage />} />
-              <Route path="history" element={<DepositHistoryPage />} />
-            </Route>
+            <Route path="/dashboard/deposit/request" element={<DepositRequestPage />} />
+            <Route path="/dashboard/deposit/history" element={<DepositHistoryPage />} />
+            <Route path="/dashboard/profile" element={<ProfilePage />} />
           </Route>
         </Route>
 

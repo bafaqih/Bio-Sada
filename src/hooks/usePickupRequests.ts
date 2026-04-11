@@ -141,13 +141,17 @@ export function useCancelPickupRequest() {
 
 // ── Helper: Upload waste photo to Supabase Storage ───────────
 
-export async function uploadWastePhoto(file: File, userId: string): Promise<string> {
-  const ext = file.name.split('.').pop();
-  const fileName = `${userId}/${Date.now()}.${ext}`;
+import { compressImage } from '@/lib/imageCompression';
+
+export async function uploadWastePhoto(file: File, userId: string, username: string | null): Promise<string> {
+  const compressedFile = await compressImage(file);
+  const ext = compressedFile.name.split('.').pop() || 'webp';
+  const nameLabel = username ? username : userId;
+  const fileName = `${userId}/${Date.now()}-${nameLabel}.${ext}`;
 
   const { error } = await supabase.storage
     .from('waste-photos')
-    .upload(fileName, file);
+    .upload(fileName, compressedFile);
 
   if (error) throw error;
 

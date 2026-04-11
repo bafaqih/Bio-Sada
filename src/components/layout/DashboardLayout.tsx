@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+// DashboardLayout.tsx
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   Home,
@@ -12,6 +12,7 @@ import {
   Recycle,
   ChevronsUpDown,
   User,
+  ChevronRight,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
@@ -42,26 +43,41 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
-
-import ProfileModal from '@/components/shared/ProfileModal';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 // ── Navigation menu items per role ──────────────────────────
 
 interface NavItem {
   label: string;
-  href: string;
+  href?: string;
   icon: React.ElementType;
   /** If true, match pathname with startsWith instead of exact */
   matchPrefix?: boolean;
+  subItems?: { label: string; href: string }[];
 }
 
 const NAV_ITEMS: Record<UserRole, NavItem[]> = {
   customers: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
     { label: 'Daftar Limbah', href: '/dashboard/waste-list', icon: List },
-    { label: 'Setor Sampah', href: '/dashboard/deposit', icon: ArrowDownToLine, matchPrefix: true },
+    {
+      label: 'Setor Sampah',
+      icon: ArrowDownToLine,
+      matchPrefix: true,
+      subItems: [
+        { label: 'Request Penjemputan', href: '/dashboard/deposit/request' },
+        { label: 'Riwayat Request', href: '/dashboard/deposit/history' },
+      ],
+    },
   ],
   partners: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
@@ -97,7 +113,7 @@ function getInitials(name: string): string {
 export default function DashboardLayout() {
   const { profile, logout } = useAuthStore();
   const location = useLocation();
-  const [showProfile, setShowProfile] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = NAV_ITEMS[profile?.role ?? 'customers'];
   const roleLabel = ROLE_LABELS[profile?.role ?? 'customers'];
@@ -109,10 +125,27 @@ export default function DashboardLayout() {
 
   /** Check if a nav item is active */
   const isNavActive = (item: NavItem): boolean => {
-    if (item.matchPrefix) {
+    if (item.subItems) {
+      return item.subItems.some((sub) => location.pathname === sub.href);
+    }
+    if (item.matchPrefix && item.href) {
       return location.pathname.startsWith(item.href);
     }
     return location.pathname === item.href;
+  };
+
+  /** Get current page title string */
+  const getPageTitle = () => {
+    if (location.pathname === '/dashboard/profile') return 'Profil Saya';
+    for (const item of navItems) {
+      if (item.subItems) {
+        const activeSub = item.subItems.find((sub) => location.pathname === sub.href);
+        if (activeSub) return activeSub.label;
+      } else if (item.href && location.pathname === item.href) {
+        return item.label;
+      }
+    }
+    return 'Dashboard';
   };
 
   return (
@@ -147,6 +180,58 @@ export default function DashboardLayout() {
                 <SidebarMenu>
                   {navItems.map((item) => {
                     const active = isNavActive(item);
+
+                    // Submenu (Collapsible)
+                    if (item.subItems) {
+                      return (
+                        <Collapsible
+                          key={item.label}
+                          defaultOpen={active}
+                          className="group/collapsible"
+                        >
+                          <SidebarMenuItem>
+                            <CollapsibleTrigger asChild>
+                              <SidebarMenuButton
+                                tooltip={item.label}
+                                className={
+                                  active
+                                    ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800'
+                                    : 'text-gray-600 hover:bg-emerald-50/60 hover:text-emerald-700'
+                                }
+                              >
+                                <item.icon className="h-4 w-4" />
+                                <span>{item.label}</span>
+                                <ChevronRight className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                              </SidebarMenuButton>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                              <SidebarMenuSub>
+                                {item.subItems.map((sub) => {
+                                  const subActive = location.pathname === sub.href;
+                                  return (
+                                    <SidebarMenuSubItem key={sub.href}>
+                                      <SidebarMenuSubButton
+                                        asChild
+                                        isActive={subActive}
+                                        className={
+                                          subActive
+                                            ? 'font-medium text-emerald-700'
+                                            : 'text-gray-500 hover:text-emerald-600'
+                                        }
+                                      >
+                                        <Link to={sub.href}>{sub.label}</Link>
+                                      </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                  );
+                                })}
+                              </SidebarMenuSub>
+                            </CollapsibleContent>
+                          </SidebarMenuItem>
+                        </Collapsible>
+                      );
+                    }
+
+                    // Normal Item
                     return (
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
@@ -159,7 +244,7 @@ export default function DashboardLayout() {
                               : 'text-gray-600 hover:bg-emerald-50/60 hover:text-emerald-700'
                           }
                         >
-                          <Link to={item.href}>
+                          <Link to={item.href!}>
                             <item.icon className="h-4 w-4" />
                             <span>{item.label}</span>
                           </Link>
@@ -215,7 +300,7 @@ export default function DashboardLayout() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       id="btn-profile"
-                      onClick={() => setShowProfile(true)}
+                      onClick={() => navigate('/dashboard/profile')}
                       className="cursor-pointer text-gray-700 focus:bg-emerald-50 focus:text-emerald-700"
                     >
                       <User className="mr-2 h-4 w-4" />
@@ -247,20 +332,17 @@ export default function DashboardLayout() {
             <Separator orientation="vertical" className="mr-2 h-4 bg-gray-200" />
             <div className="flex flex-1 items-center justify-between">
               <h2 className="text-sm font-medium text-gray-500">
-                {navItems.find((item) => isNavActive(item))?.label ?? 'Dashboard'}
+                {getPageTitle()}
               </h2>
             </div>
           </header>
 
           {/* Page Content */}
-          <div className="flex-1 bg-gradient-to-br from-gray-50/50 via-white to-emerald-50/30 p-4 md:p-6">
+          <div className="flex-1 overflow-x-hidden bg-gradient-to-br from-gray-50/50 via-white to-emerald-50/30 p-4 md:p-6">
             <Outlet />
           </div>
         </SidebarInset>
       </SidebarProvider>
-
-      {/* Profile Modal */}
-      <ProfileModal open={showProfile} onOpenChange={setShowProfile} />
     </TooltipProvider>
   );
 }

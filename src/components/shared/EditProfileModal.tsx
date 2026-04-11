@@ -22,7 +22,7 @@ interface EditProfileModalProps {
 }
 
 export default function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) {
-  const { profile } = useAuthStore();
+  const { profile, session } = useAuthStore();
   const updateProfile = useUpdateProfile();
 
   const [fullName, setFullName] = useState('');
@@ -58,6 +58,13 @@ export default function EditProfileModal({ open, onOpenChange }: EditProfileModa
     }
   };
 
+  /** Map role to Indonesian display label */
+  const roleLabel: Record<string, string> = {
+    customers: 'Nasabah',
+    partners: 'Mitra Pengepul',
+    admin: 'Administrator',
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -66,6 +73,28 @@ export default function EditProfileModal({ open, onOpenChange }: EditProfileModa
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-2">
+          {/* Read-only Username */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="edit-username" className="text-gray-700">Username</Label>
+            <Input
+              id="edit-username"
+              value={profile?.username ?? ''}
+              disabled
+              className="bg-gray-100 text-gray-500"
+            />
+          </div>
+
+          {/* Read-only Email */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="edit-email" className="text-gray-700">Email</Label>
+            <Input
+              id="edit-email"
+              value={session?.user.email ?? ''}
+              disabled
+              className="bg-gray-100 text-gray-500"
+            />
+          </div>
+
           {/* Full Name */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="edit-fullname" className="text-gray-700">
@@ -100,10 +129,16 @@ export default function EditProfileModal({ open, onOpenChange }: EditProfileModa
             </div>
           </div>
 
-          {/* Read-only fields info */}
-          <p className="text-xs text-gray-400">
-            Email, username, dan role tidak dapat diubah dari sini.
-          </p>
+          {/* Read-only Role */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="edit-role" className="text-gray-700">Role</Label>
+            <Input
+              id="edit-role"
+              value={roleLabel[profile?.role ?? ''] ?? profile?.role ?? ''}
+              disabled
+              className="bg-gray-100 text-gray-500"
+            />
+          </div>
 
           <DialogFooter>
             <Button

@@ -149,13 +149,18 @@ export default function DepositRequestPage() {
       return;
     }
 
+    if (!photoFile) {
+      toast.error('Foto sampah wajib diunggah.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Upload photo if provided
+      // Upload photo
       let wastePhotoUrl: string | null = null;
       if (photoFile && profile) {
-        wastePhotoUrl = await uploadWastePhoto(photoFile, profile.id);
+        wastePhotoUrl = await uploadWastePhoto(photoFile, profile.id, profile.username);
       }
 
       await createRequest.mutateAsync({
@@ -336,7 +341,9 @@ export default function DepositRequestPage() {
         <CardContent className="grid gap-4 pt-6 md:grid-cols-2">
           {/* Photo Upload */}
           <div className="flex flex-col gap-2">
-            <Label className="text-gray-700">Foto Sampah (opsional)</Label>
+            <Label className="text-gray-700">
+              Foto Sampah <span className="text-red-500">*</span>
+            </Label>
             {photoPreview ? (
               <div className="relative h-40 w-full overflow-hidden rounded-lg border border-gray-200">
                 <img

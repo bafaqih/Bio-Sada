@@ -35,20 +35,24 @@ export function useUpdateProfile() {
   });
 }
 
+import { compressImage } from '@/lib/imageCompression';
+
 // ── Mutation: Upload avatar ──────────────────────────────────
 
 export function useUploadAvatar() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ file, userId }: { file: File; userId: string }) => {
-      const ext = file.name.split('.').pop();
-      const fileName = `${userId}/avatar.${ext}`;
+    mutationFn: async ({ file, userId, username }: { file: File; userId: string; username: string | null }) => {
+      const compressedFile = await compressImage(file);
+      const ext = compressedFile.name.split('.').pop() || 'webp';
+      const nameLabel = username ? username : userId;
+      const fileName = `${userId}/${Date.now()}-${nameLabel}.${ext}`;
 
       // Upload to Supabase Storage (overwrite existing)
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, { upsert: true });
+        .upload(fileName, compressedFile, { upsert: true });
 
       if (uploadError) throw uploadError;
 
