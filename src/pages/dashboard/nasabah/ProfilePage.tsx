@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Camera, Mail, Phone, Shield, User, MapPin, Pencil, Plus, Trash2, Star } from 'lucide-react';
@@ -42,11 +43,21 @@ export default function ProfilePage() {
   const { data: addresses, isLoading: addressesLoading } = useAddresses(profile?.id);
   const uploadAvatar = useUploadAvatar();
   const deleteAddress = useDeleteAddress(profile?.id);
+  const location = useLocation();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [showNewAddress, setShowNewAddress] = useState(false);
+
+  // Auto-open modal if navigated with state
+  useEffect(() => {
+    if (location.state && (location.state as any).openNewAddress) {
+      setShowNewAddress(true);
+      // Clear state so it doesn't re-trigger on reload
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -1,4 +1,5 @@
 // DashboardLayout.tsx
+import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
@@ -13,13 +14,22 @@ import {
   ChevronsUpDown,
   User,
   ChevronRight,
+  Map,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
+import { useAddresses } from '@/hooks/useAddresses';
 import type { UserRole } from '@/lib/types';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,6 +63,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
 
 // ── Navigation menu items per role ──────────────────────────
 
@@ -114,9 +125,15 @@ export default function DashboardLayout() {
   const { profile, logout } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
+  const [hidePrompt, setHidePrompt] = useState(false);
 
   const navItems = NAV_ITEMS[profile?.role ?? 'customers'];
   const roleLabel = ROLE_LABELS[profile?.role ?? 'customers'];
+  
+  const { data: addresses, isLoading: addressesLoading } = useAddresses(profile?.id);
+  
+  const isCustomer = profile?.role === 'customers';
+  const hasNoAddress = !addressesLoading && (!addresses || addresses.length === 0) && !hidePrompt;
 
   const handleLogout = async () => {
     await logout();
@@ -341,6 +358,37 @@ export default function DashboardLayout() {
           </div>
         </SidebarInset>
       </SidebarProvider>
+
+      {/* Global No-Address Warning for Customers */}
+      {isCustomer && hasNoAddress && (
+        <Dialog open={true} onOpenChange={() => {}}>
+          <DialogContent className="sm:max-w-md [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
+            <DialogHeader className="flex flex-col items-center sm:text-center mt-2">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-4">
+                <Map className="h-8 w-8 text-amber-600" />
+              </div>
+              <DialogTitle className="text-xl font-bold text-gray-900">Alamat Belum Diatur</DialogTitle>
+            </DialogHeader>
+            <div className="py-2">
+              <p className="text-sm text-gray-500">
+                Profil Anda memerlukan alamat utama untuk dapat melakukan request penjemputan sampah. Harap setel lokasi Anda sekarang.
+              </p>
+            </div>
+            <DialogFooter className="mt-4 sm:justify-center">
+              <Button
+                onClick={() => {
+                  setHidePrompt(true);
+                  navigate('/dashboard/profile', { state: { openNewAddress: true } });
+                }}
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+              >
+                Atur Alamat Sekarang <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
     </TooltipProvider>
   );
 }

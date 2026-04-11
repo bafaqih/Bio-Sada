@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, MapPin } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
 import { useCreateAddress, useUpdateAddress } from '@/hooks/useAddresses';
@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 interface AddressModalProps {
   open: boolean;
@@ -66,11 +67,38 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handlePinLocation = () => {
+    if ('geolocation' in navigator) {
+      toast.loading('Mencari lokasi...', { id: 'location-toast' });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          updateField('latitude', position.coords.latitude.toString());
+          updateField('longitude', position.coords.longitude.toString());
+          toast.success('Lokasi berhasil didapatkan.', { id: 'location-toast' });
+        },
+        (error) => {
+          console.error(error);
+          toast.error('Gagal mendapatkan lokasi. Pastikan izin lokasi aktif.', { id: 'location-toast' });
+        }
+      );
+    } else {
+      toast.error('Browser Anda tidak mendukung fitur lokasi.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.label.trim() || !form.address_detail.trim() || !form.city.trim()) {
-      toast.error('Label, detail alamat, dan kota wajib diisi.');
+    if (
+      !form.label.trim() ||
+      !form.address_detail.trim() ||
+      !form.city.trim() ||
+      !form.province.trim() ||
+      !form.postal_code.trim() ||
+      !form.latitude ||
+      !form.longitude
+    ) {
+      toast.error('Semua kolom alamat (termasuk lokasi GPS) wajib diisi.');
       return;
     }
 
@@ -80,8 +108,8 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
       city: form.city.trim(),
       province: form.province.trim(),
       postal_code: form.postal_code.trim(),
-      latitude: form.latitude ? parseFloat(form.latitude) : null,
-      longitude: form.longitude ? parseFloat(form.longitude) : null,
+      latitude: parseFloat(form.latitude),
+      longitude: parseFloat(form.longitude),
       is_primary: form.is_primary,
     };
 
@@ -157,7 +185,9 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
               />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="addr-province" className="text-gray-700">Provinsi</Label>
+              <Label htmlFor="addr-province" className="text-gray-700">
+                Provinsi <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="addr-province"
                 value={form.province}
@@ -170,7 +200,9 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
 
           {/* Postal Code */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="addr-postal" className="text-gray-700">Kode Pos</Label>
+            <Label htmlFor="addr-postal" className="text-gray-700">
+              Kode Pos <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="addr-postal"
               value={form.postal_code}
@@ -180,31 +212,52 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
             />
           </div>
 
-          {/* Lat / Lng */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="addr-lat" className="text-gray-700">Latitude</Label>
-              <Input
-                id="addr-lat"
-                type="number"
-                step="any"
-                value={form.latitude}
-                onChange={(e) => updateField('latitude', e.target.value)}
-                placeholder="-7.977"
-                className="h-11 border-gray-200 bg-white/70 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20"
-              />
+          <Separator className="my-1" />
+
+          {/* Lat / Lng Section */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <Label className="font-semibold text-gray-800">Koordinat Lokasi</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handlePinLocation}
+                className="h-8 gap-1 border-emerald-200 bg-emerald-50 text-xs text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+              >
+                <MapPin className="h-3.5 w-3.5" /> Atur/Pin Lokasi
+              </Button>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="addr-lng" className="text-gray-700">Longitude</Label>
-              <Input
-                id="addr-lng"
-                type="number"
-                step="any"
-                value={form.longitude}
-                onChange={(e) => updateField('longitude', e.target.value)}
-                placeholder="112.634"
-                className="h-11 border-gray-200 bg-white/70 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20"
-              />
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="addr-lat" className="text-xs text-gray-500">
+                  Latitude <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="addr-lat"
+                  type="number"
+                  step="any"
+                  value={form.latitude}
+                  onChange={(e) => updateField('latitude', e.target.value)}
+                  placeholder="-7.977"
+                  className="h-10 border-gray-200 bg-gray-50/50"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="addr-lng" className="text-xs text-gray-500">
+                  Longitude <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="addr-lng"
+                  type="number"
+                  step="any"
+                  value={form.longitude}
+                  onChange={(e) => updateField('longitude', e.target.value)}
+                  placeholder="112.634"
+                  className="h-10 border-gray-200 bg-gray-50/50"
+                />
+              </div>
             </div>
           </div>
 
