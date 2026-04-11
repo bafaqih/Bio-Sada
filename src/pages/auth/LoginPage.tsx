@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, LogIn, ArrowLeft, Recycle, Loader2 } from 'lucide-react';
@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // State form
   const [email, setEmail] = useState('');
@@ -20,14 +21,24 @@ export default function LoginPage() {
   const [sedangMemuat, setSedangMemuat] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Load saved email on mount
+  // Load saved email on mount & Check verification
   useEffect(() => {
+    // Local Storage Check
     const savedEmail = localStorage.getItem('bioSada_saved_email');
     if (savedEmail) {
       setEmail(savedEmail);
       setRememberMe(true);
     }
-  }, []);
+
+    // Email Verified Toast Injection
+    const params = new URLSearchParams(location.search);
+    if (params.get('verified') === 'true') {
+      toast.success('Akun berhasil terverifikasi, silakan masuk');
+      // Clean up URL to prevent repeat toasts on manual refresh
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }, [location.search]);
 
   // Handler submit login
   const handleLogin = async (e: FormEvent) => {

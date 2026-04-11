@@ -113,6 +113,9 @@ export default function RegisterPage() {
 
     setSedangMemuat(true);
 
+    const randomSuffix = Math.floor(1000000 + Math.random() * 9000000);
+    const generatedUsername = `user${randomSuffix}`;
+
     const { error } = await supabase.auth.signUp({
       email: form.email.trim(),
       password: form.password,
@@ -121,7 +124,9 @@ export default function RegisterPage() {
           full_name: form.namaLengkap.trim(),
           role: form.role,
           phone: `62${form.nomorTelepon.trim()}`,
+          username: generatedUsername,
         },
+        emailRedirectTo: `${window.location.origin}/login?verified=true`,
       },
     });
 
