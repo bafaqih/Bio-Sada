@@ -283,9 +283,9 @@ export default function DashboardLayout() {
                       id="sidebar-user-menu"
                       className="transition-colors hover:bg-emerald-50/60"
                     >
-                      <Avatar className="h-8 w-8 rounded-lg border border-emerald-200">
+                      <Avatar className="h-8 w-8 rounded-full border-2 border-emerald-200">
                         <AvatarImage src={profile?.avatar_url ?? undefined} alt={profile?.full_name ?? ''} />
-                        <AvatarFallback className="rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-xs font-semibold text-white">
+                        <AvatarFallback className="rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-xs font-semibold text-white">
                           {getInitials(profile?.full_name ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
