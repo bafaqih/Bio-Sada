@@ -195,8 +195,8 @@ export default function DashboardLayout() {
                                 tooltip={item.label}
                                 className={
                                   active
-                                    ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800'
-                                    : 'text-gray-600 hover:bg-emerald-50/60 hover:text-emerald-700'
+                                    ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-50! hover:text-emerald-700!'
+                                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                 }
                               >
                                 <item.icon className="h-4 w-4" />
@@ -212,11 +212,10 @@ export default function DashboardLayout() {
                                     <SidebarMenuSubItem key={sub.href}>
                                       <SidebarMenuSubButton
                                         asChild
-                                        isActive={subActive}
                                         className={
                                           subActive
-                                            ? 'font-medium text-emerald-700'
-                                            : 'text-gray-500 hover:text-emerald-600'
+                                            ? 'bg-emerald-50/50 font-medium text-emerald-600 hover:bg-emerald-50/50! hover:text-emerald-600!'
+                                            : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                                         }
                                       >
                                         <Link to={sub.href}>{sub.label}</Link>
@@ -236,12 +235,11 @@ export default function DashboardLayout() {
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                           asChild
-                          isActive={active}
                           tooltip={item.label}
                           className={
                             active
-                              ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800'
-                              : 'text-gray-600 hover:bg-emerald-50/60 hover:text-emerald-700'
+                              ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-50! hover:text-emerald-700!'
+                              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                           }
                         >
                           <Link to={item.href!}>

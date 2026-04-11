@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Loader2, ImagePlus, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, Trash2, Loader2, ImagePlus, X, ArrowDownToLine } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
 import { useActiveWasteCategories } from '@/hooks/useWasteCategories';
@@ -108,7 +109,7 @@ export default function DepositRequestPage() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Ukuran foto maksimal 5MB.');
+      toast.error('Ukuran foto maksimal 5MB sebelum dikompres.');
       return;
     }
 
@@ -195,7 +196,21 @@ export default function DepositRequestPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-4"
+    >
+      <div className="mb-6">
+        <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+          <ArrowDownToLine className="h-6 w-6 text-emerald-600" />
+          Request Penjemputan
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">Isi formulir untuk request penjemputan sampah Anda.</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
       {/* Address + Date/Time */}
       <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
         <CardContent className="grid gap-4 pt-6 md:grid-cols-3">
@@ -426,5 +441,6 @@ export default function DepositRequestPage() {
         </CardContent>
       </Card>
     </form>
+    </motion.div>
   );
 }

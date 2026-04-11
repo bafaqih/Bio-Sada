@@ -91,10 +91,11 @@ export default function ProfilePage() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mx-auto max-w-2xl space-y-6"
+      className="space-y-6"
     >
       <div>
-        <h1 className="text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+        <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+          <User className="h-6 w-6 text-emerald-600" />
           Profil Saya
         </h1>
         <p className="mt-1 text-sm text-gray-500">Kelola informasi pribadi dan alamat Anda.</p>

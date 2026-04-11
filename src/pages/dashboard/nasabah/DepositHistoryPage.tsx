@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, XCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, XCircle, History } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
 import { usePickupRequests, useCancelPickupRequest } from '@/hooks/usePickupRequests';
@@ -100,7 +101,20 @@ export default function DepositHistoryPage() {
   };
 
   return (
-    <div className="space-y-0">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-4"
+    >
+      <div className="mb-6">
+        <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+          <History className="h-6 w-6 text-emerald-600" />
+          Riwayat Request
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">Daftar riwayat request penjemputan sampah Anda.</p>
+      </div>
+
       {/* Table Container */}
       <div className="rounded-xl border border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
         {/* Top Bar: Page Size */}
@@ -257,6 +271,6 @@ export default function DepositHistoryPage() {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
