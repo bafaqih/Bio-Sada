@@ -9,6 +9,8 @@ import { useAuthStore } from '@/stores/authStore';
 // Auth pages
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
+import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
+import NewPasswordPage from '@/pages/auth/NewPasswordPage';
 
 // Dashboard infrastructure
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
@@ -120,6 +122,8 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/password/reset" element={<ResetPasswordPage />} />
+        <Route path="/password/new" element={<NewPasswordPage />} />
 
         {/* Protected dashboard routes — all authenticated roles */}
         <Route element={<ProtectedRoute allowedRoles={['admin', 'partners', 'customers']} />}>
