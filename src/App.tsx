@@ -23,6 +23,11 @@ import DepositRequestPage from '@/pages/dashboard/nasabah/DepositRequestPage';
 import DepositHistoryPage from '@/pages/dashboard/nasabah/DepositHistoryPage';
 import ProfilePage from '@/pages/dashboard/nasabah/ProfilePage';
 
+// Mitra pages
+import ActiveTasksPage from '@/pages/dashboard/mitra/ActiveTasksPage';
+import TaskDetailPage from '@/pages/dashboard/mitra/TaskDetailPage';
+import TaskHistoryPage from '@/pages/dashboard/mitra/TaskHistoryPage';
+
 // ── Query Client ─────────────────────────────────────────────
 
 const queryClient = new QueryClient({
@@ -131,11 +136,18 @@ function AppRoutes() {
             {/* Shared dashboard home (shows role-specific content) */}
             <Route path="/dashboard" element={<DashboardHome />} />
 
-            {/* Customer-specific routes */}
+            {/* Shared routes (accessible by customers + partners) */}
             <Route path="/dashboard/waste-list" element={<WasteListPage />} />
+            <Route path="/dashboard/profile" element={<ProfilePage />} />
+
+            {/* Customer-specific routes */}
             <Route path="/dashboard/deposit/request" element={<DepositRequestPage />} />
             <Route path="/dashboard/deposit/history" element={<DepositHistoryPage />} />
-            <Route path="/dashboard/profile" element={<ProfilePage />} />
+
+            {/* Partner-specific routes */}
+            <Route path="/dashboard/task/active" element={<ActiveTasksPage />} />
+            <Route path="/dashboard/task/history" element={<TaskHistoryPage />} />
+            <Route path="/dashboard/task/:id" element={<TaskDetailPage />} />
           </Route>
         </Route>
 

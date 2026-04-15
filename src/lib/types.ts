@@ -89,3 +89,17 @@ export interface CustomerStats {
   totalEarnings: number;
   totalTransactions: number;
 }
+
+/** Partner stats aggregated from completed pickup requests */
+export interface PartnerStats {
+  totalCompletedTasks: number;
+  totalWeightCollected: number;
+  totalCustomersServed: number;
+}
+
+/** Extended pickup request with joined customer + address data for partner dashboard */
+export interface PickupRequestWithDetails extends PickupRequest {
+  customer?: Pick<Profile, 'full_name' | 'phone_number'>;
+  address?: Pick<Address, 'address_detail' | 'city' | 'latitude' | 'longitude'>;
+  items?: PickupRequestItem[];
+}

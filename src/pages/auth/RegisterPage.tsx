@@ -125,6 +125,7 @@ export default function RegisterPage() {
           role: form.role,
           phone_number: `62${form.nomorTelepon.trim()}`,
           username: generatedUsername,
+          is_verified: form.role !== 'partners',
         },
         emailRedirectTo: `${window.location.origin}/login?verified=true`,
       },

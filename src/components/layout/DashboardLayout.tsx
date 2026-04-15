@@ -6,7 +6,6 @@ import {
   Home,
   List,
   ArrowDownToLine,
-  Inbox,
   UserCheck,
   BadgeDollarSign,
   LogOut,
@@ -15,6 +14,10 @@ import {
   User,
   ChevronRight,
   Map,
+  ClipboardList,
+  Loader2,
+  Hourglass,
+  RefreshCw,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
@@ -92,7 +95,16 @@ const NAV_ITEMS: Record<UserRole, NavItem[]> = {
   ],
   partners: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
-    { label: 'Order Masuk', href: '/dashboard/orders', icon: Inbox },
+    { label: 'Daftar Limbah', href: '/dashboard/waste-list', icon: List },
+    {
+      label: 'Tugas',
+      icon: ClipboardList,
+      matchPrefix: true,
+      subItems: [
+        { label: 'Tugas Aktif', href: '/dashboard/task/active' },
+        { label: 'Riwayat Tugas', href: '/dashboard/task/history' },
+      ],
+    },
   ],
   admin: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
@@ -122,10 +134,11 @@ function getInitials(name: string): string {
 // ── Main Layout Component ───────────────────────────────────
 
 export default function DashboardLayout() {
-  const { profile, logout } = useAuthStore();
+  const { profile, logout, fetchProfile } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [hidePrompt, setHidePrompt] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const navItems = NAV_ITEMS[profile?.role ?? 'customers'];
   const roleLabel = ROLE_LABELS[profile?.role ?? 'customers'];
@@ -133,7 +146,9 @@ export default function DashboardLayout() {
   const { data: addresses, isLoading: addressesLoading } = useAddresses(profile?.id);
   
   const isCustomer = profile?.role === 'customers';
-  const hasNoAddress = !addressesLoading && (!addresses || addresses.length === 0) && !hidePrompt;
+  const isPartner = profile?.role === 'partners';
+  const needsAddress = (isCustomer || isPartner) && !addressesLoading && (!addresses || addresses.length === 0) && !hidePrompt;
+  const needsApproval = isPartner && !profile?.is_verified && !needsAddress;
 
   const handleLogout = async () => {
     await logout();
@@ -151,9 +166,30 @@ export default function DashboardLayout() {
     return location.pathname === item.href;
   };
 
+  /** Refresh partner verification status */
+  const handleRefreshApproval = async () => {
+    if (!profile) return;
+    setIsRefreshing(true);
+    try {
+      await fetchProfile(profile.id);
+      // Re-read from store after fetch
+      const updated = useAuthStore.getState().profile;
+      if (updated?.is_verified) {
+        toast.success('Akun mitra Anda berhasil disetujui! Selamat bergabung 🎉');
+      } else {
+        toast.info('Status masih menunggu persetujuan. Silakan coba lagi nanti.');
+      }
+    } catch {
+      toast.error('Gagal memeriksa status. Coba lagi.');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   /** Get current page title string */
   const getPageTitle = () => {
     if (location.pathname === '/dashboard/profile') return 'Profil Saya';
+    if (location.pathname.startsWith('/dashboard/task/') && location.pathname !== '/dashboard/task/active' && location.pathname !== '/dashboard/task/history') return 'Detail Tugas';
     for (const item of navItems) {
       if (item.subItems) {
         const activeSub = item.subItems.find((sub) => location.pathname === sub.href);
@@ -359,8 +395,8 @@ export default function DashboardLayout() {
         </SidebarInset>
       </SidebarProvider>
 
-      {/* Global No-Address Warning for Customers */}
-      {isCustomer && hasNoAddress && (
+      {/* Global No-Address Warning for Customers & Partners */}
+      {needsAddress && (
         <Dialog open={true} onOpenChange={() => {}}>
           <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
             <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
@@ -371,7 +407,9 @@ export default function DashboardLayout() {
             </DialogHeader>
             <div className="pt-1 pb-0">
               <p className="text-sm leading-relaxed text-gray-500">
-                Profil Anda memerlukan alamat utama untuk dapat melakukan request penjemputan sampah. Harap setel lokasi Anda sekarang.
+                {isPartner
+                  ? 'Sebagai mitra, Anda wajib mengisi alamat terlebih dahulu sebelum akun dapat diproses untuk persetujuan admin.'
+                  : 'Profil Anda memerlukan alamat utama untuk dapat melakukan request penjemputan sampah. Harap setel lokasi Anda sekarang.'}
               </p>
             </div>
             <DialogFooter className="mt-4 w-full sm:justify-center">
@@ -384,6 +422,39 @@ export default function DashboardLayout() {
                 className="h-12 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
               >
                 Atur Alamat Sekarang <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Partner Approval Gate — blocks all features until admin approves */}
+      {needsApproval && (
+        <Dialog open={true} onOpenChange={() => {}}>
+          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
+            <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mb-4 animate-pulse">
+                <Hourglass className="h-8 w-8 text-blue-600" />
+              </div>
+              <DialogTitle className="text-2xl tracking-tight font-bold text-gray-900">Menunggu Persetujuan</DialogTitle>
+            </DialogHeader>
+            <div className="pt-1 pb-0">
+              <p className="text-sm leading-relaxed text-gray-500">
+                Akun Anda sedang menunggu persetujuan dari Admin Bio-Sada. Silakan tunggu dan klik tombol di bawah untuk memeriksa status.
+              </p>
+            </div>
+            <DialogFooter className="mt-4 w-full sm:justify-center">
+              <Button
+                size="lg"
+                onClick={handleRefreshApproval}
+                disabled={isRefreshing}
+                className="h-12 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-base font-semibold text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700 hover:shadow-blue-500/30 disabled:opacity-60"
+              >
+                {isRefreshing ? (
+                  <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Memeriksa...</>
+                ) : (
+                  <><RefreshCw className="mr-2 h-5 w-5" /> Periksa Status</>
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>
