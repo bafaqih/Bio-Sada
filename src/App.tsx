@@ -28,6 +28,15 @@ import ActiveTasksPage from '@/pages/dashboard/mitra/ActiveTasksPage';
 import TaskDetailPage from '@/pages/dashboard/mitra/TaskDetailPage';
 import TaskHistoryPage from '@/pages/dashboard/mitra/TaskHistoryPage';
 
+// Admin pages
+import AdminWasteListPage from '@/pages/dashboard/admin/AdminWasteListPage';
+import PartnerManagementPage from '@/pages/dashboard/admin/PartnerManagementPage';
+import PartnerDetailPage from '@/pages/dashboard/admin/PartnerDetailPage';
+import CustomerManagementPage from '@/pages/dashboard/admin/CustomerManagementPage';
+import CustomerDetailPage from '@/pages/dashboard/admin/CustomerDetailPage';
+import TransactionLogsPage from '@/pages/dashboard/admin/TransactionLogsPage';
+import TransactionDetailPage from '@/pages/dashboard/admin/TransactionDetailPage';
+
 // ── Query Client ─────────────────────────────────────────────
 
 const queryClient = new QueryClient({
@@ -95,6 +104,13 @@ function NotFoundPage() {
   );
 }
 
+// ── Role-aware waste list wrapper ────────────────────────────
+
+function WasteListRouteWrapper() {
+  const { profile } = useAuthStore();
+  return profile?.role === 'admin' ? <AdminWasteListPage /> : <WasteListPage />;
+}
+
 // ── Main App ────────────────────────────────────────────────
 
 function AppRoutes() {
@@ -136,8 +152,8 @@ function AppRoutes() {
             {/* Shared dashboard home (shows role-specific content) */}
             <Route path="/dashboard" element={<DashboardHome />} />
 
-            {/* Shared routes (accessible by customers + partners) */}
-            <Route path="/dashboard/waste-list" element={<WasteListPage />} />
+            {/* Shared routes (accessible by all roles) */}
+            <Route path="/dashboard/waste-list" element={<WasteListRouteWrapper />} />
             <Route path="/dashboard/profile" element={<ProfilePage />} />
 
             {/* Customer-specific routes */}
@@ -148,6 +164,18 @@ function AppRoutes() {
             <Route path="/dashboard/task/active" element={<ActiveTasksPage />} />
             <Route path="/dashboard/task/history" element={<TaskHistoryPage />} />
             <Route path="/dashboard/task/:id" element={<TaskDetailPage />} />
+          </Route>
+        </Route>
+
+        {/* Admin-only routes */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard/management/partner" element={<PartnerManagementPage />} />
+            <Route path="/dashboard/management/partner/:id" element={<PartnerDetailPage />} />
+            <Route path="/dashboard/management/customer" element={<CustomerManagementPage />} />
+            <Route path="/dashboard/management/customer/:id" element={<CustomerDetailPage />} />
+            <Route path="/dashboard/transaction" element={<TransactionLogsPage />} />
+            <Route path="/dashboard/transaction/:id" element={<TransactionDetailPage />} />
           </Route>
         </Route>
 

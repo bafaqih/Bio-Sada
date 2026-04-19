@@ -108,8 +108,17 @@ const NAV_ITEMS: Record<UserRole, NavItem[]> = {
   ],
   admin: [
     { label: 'Dashboard', href: '/dashboard', icon: Home },
-    { label: 'Verifikasi Mitra', href: '/dashboard/verify-partners', icon: UserCheck },
-    { label: 'Harga Sampah', href: '/dashboard/waste-prices', icon: BadgeDollarSign },
+    { label: 'Daftar Limbah', href: '/dashboard/waste-list', icon: List },
+    {
+      label: 'Manajemen Pengguna',
+      icon: UserCheck,
+      matchPrefix: true,
+      subItems: [
+        { label: 'Mitra', href: '/dashboard/management/partner' },
+        { label: 'Nasabah', href: '/dashboard/management/customer' },
+      ],
+    },
+    { label: 'Log Transaksi', href: '/dashboard/transaction', icon: BadgeDollarSign },
   ],
 };
 
@@ -195,6 +204,10 @@ export default function DashboardLayout() {
   const getPageTitle = () => {
     if (location.pathname === '/dashboard/profile') return 'Profil Saya';
     if (location.pathname.startsWith('/dashboard/task/') && location.pathname !== '/dashboard/task/active' && location.pathname !== '/dashboard/task/history') return 'Detail Tugas';
+    // Admin detail pages
+    if (location.pathname.match(/^\/dashboard\/management\/partner\/.+/)) return 'Detail Mitra';
+    if (location.pathname.match(/^\/dashboard\/management\/customer\/.+/)) return 'Detail Nasabah';
+    if (location.pathname.match(/^\/dashboard\/transaction\/.+/)) return 'Detail Transaksi';
     for (const item of navItems) {
       if (item.subItems) {
         const activeSub = item.subItems.find((sub) => location.pathname === sub.href);

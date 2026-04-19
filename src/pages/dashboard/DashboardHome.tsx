@@ -21,6 +21,7 @@ import { usePendingRequests, useAcceptRequest } from '@/hooks/usePartnerRequests
 import { useRealtimeOrders } from '@/hooks/useRealtimeOrders';
 import { useAddresses } from '@/hooks/useAddresses';
 import type { PickupRequestWithDetails } from '@/lib/types';
+import AdminOverviewPage from './admin/AdminOverviewPage';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -477,7 +478,13 @@ export default function DashboardHome() {
       </motion.div>
 
       {/* Role-specific content */}
-      {profile?.role === 'partners' ? <PartnerDashboard /> : <CustomerDashboard />}
+      {profile?.role === 'admin' ? (
+        <AdminOverviewPage />
+      ) : profile?.role === 'partners' ? (
+        <PartnerDashboard />
+      ) : (
+        <CustomerDashboard />
+      )}
     </motion.div>
   );
 }

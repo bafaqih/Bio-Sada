@@ -103,3 +103,32 @@ export interface PickupRequestWithDetails extends PickupRequest {
   address?: Pick<Address, 'address_detail' | 'city' | 'latitude' | 'longitude'>;
   items?: PickupRequestItem[];
 }
+
+// ── Admin Types ──────────────────────────────────────────────
+
+/** Aggregated admin overview statistics */
+export interface AdminStats {
+  totalUsers: number;
+  totalCustomers: number;
+  totalPartners: number;
+  totalWeightCollected: number;
+  totalTransactionValue: number;
+}
+
+/** Profile with created_at for admin user management */
+export interface ProfileWithCreatedAt extends Profile {
+  created_at: string;
+}
+
+/** Profile with address info for admin user detail */
+export interface ProfileWithAddress extends ProfileWithCreatedAt {
+  addresses?: Address[];
+}
+
+/** Extended pickup request with both customer and partner info for admin transaction logs */
+export interface TransactionWithDetails extends PickupRequest {
+  customer?: Pick<Profile, 'full_name' | 'phone_number'>;
+  partner?: Pick<Profile, 'full_name' | 'phone_number'>;
+  address?: Pick<Address, 'address_detail' | 'city'>;
+  items?: PickupRequestItem[];
+}
