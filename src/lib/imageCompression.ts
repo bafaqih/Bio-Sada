@@ -4,7 +4,7 @@ export const compressImage = async (file: File) => {
     const options = {
         maxSizeMB: 0.8,
         maxWidthOrHeight: 1280,
-        useWebWorker: true,
+        useWebWorker: false,
         initialQuality: 0.8
     };
 
