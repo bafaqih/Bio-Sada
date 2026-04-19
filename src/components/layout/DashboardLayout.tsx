@@ -147,8 +147,13 @@ export default function DashboardLayout() {
   
   const isCustomer = profile?.role === 'customers';
   const isPartner = profile?.role === 'partners';
-  const needsAddress = (isCustomer || isPartner) && !addressesLoading && (!addresses || addresses.length === 0) && !hidePrompt;
-  const needsApproval = isPartner && !profile?.is_verified && !needsAddress;
+  
+  const hasAddress = !addressesLoading && addresses && addresses.length > 0;
+  const noAddressYet = !addressesLoading && addresses !== undefined && addresses.length === 0;
+  const needsAddress = (isCustomer || isPartner) && noAddressYet && !hidePrompt;
+  
+  // Hanya tampilkan modal Menunggu Persetujuan jika mitra SUDAH benar-benar punya alamat
+  const needsApproval = isPartner && !profile?.is_verified && hasAddress;
 
   const handleLogout = async () => {
     await logout();
