@@ -239,9 +239,10 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
                   type="number"
                   step="any"
                   value={form.latitude}
-                  onChange={(e) => updateField('latitude', e.target.value)}
+                  readOnly
+                  onClick={handlePinLocation}
                   placeholder="-7.977"
-                  className="h-10 border-gray-200 bg-gray-50/50"
+                  className="h-10 cursor-pointer border-gray-200 bg-gray-50/50"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -253,9 +254,10 @@ export default function AddressModal({ open, onOpenChange, address }: AddressMod
                   type="number"
                   step="any"
                   value={form.longitude}
-                  onChange={(e) => updateField('longitude', e.target.value)}
+                  readOnly
+                  onClick={handlePinLocation}
                   placeholder="112.634"
-                  className="h-10 border-gray-200 bg-gray-50/50"
+                  className="h-10 cursor-pointer border-gray-200 bg-gray-50/50"
                 />
               </div>
             </div>
