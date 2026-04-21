@@ -354,17 +354,15 @@ function PartnerDashboard() {
               </TableHeader>
               <TableBody>
                 {sortedRequests.map((req) => {
-                  // Build category display
+                  // Since pickup_request_items might not be readable for pending requests due to RLS,
+                  // we use total_weight from the pickup_requests row.
                   const categories = (req.items ?? [])
                     .map((item) => item.waste_categories?.name)
                     .filter(Boolean);
-                  const firstCategory = categories[0] ?? '-';
-                  const extraCount = categories.length - 1;
+                  const firstCategory = categories.length > 0 ? categories[0] : 'Beragam Sampah';
+                  const extraCount = categories.length > 1 ? categories.length - 1 : 0;
 
-                  const totalEstWeight = (req.items ?? []).reduce(
-                    (sum, item) => sum + (item.estimated_weight ?? 0),
-                    0,
-                  );
+                  const totalEstWeight = req.total_weight ?? 0;
 
                   return (
                     <TableRow key={req.id} className="transition-colors hover:bg-emerald-50/30">

@@ -181,14 +181,16 @@ export default function ProfilePage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold text-gray-800">Alamat Saya</h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowNewAddress(true)}
-                className="h-8 gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
-              >
-                <Plus className="h-3.5 w-3.5" /> Tambah Alamat
-              </Button>
+              {!(profile?.role === 'partners' && (addresses?.length ?? 0) >= 1) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowNewAddress(true)}
+                  className="h-8 gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Tambah Alamat
+                </Button>
+              )}
             </div>
 
             {addressesLoading ? (
@@ -233,16 +235,18 @@ export default function ProfilePage() {
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-600"
-                          onClick={() => handleDeleteAddress(addr.id)}
-                          disabled={deleteAddress.isPending}
-                          title="Hapus Alamat"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {profile?.role !== 'partners' && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                            onClick={() => handleDeleteAddress(addr.id)}
+                            disabled={deleteAddress.isPending}
+                            title="Hapus Alamat"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
