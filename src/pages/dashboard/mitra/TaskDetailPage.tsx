@@ -136,8 +136,8 @@ export default function TaskDetailPage() {
       await weighItems.mutateAsync(items);
       toast.success('Data timbangan berhasil disimpan!');
       setShowWeighModal(false);
-    } catch {
-      toast.error('Gagal menyimpan data timbangan.');
+    } catch (error: any) {
+      toast.error(error.message || 'Gagal menyimpan data timbangan.');
     }
   };
 
@@ -149,8 +149,8 @@ export default function TaskDetailPage() {
       toast.success('Tugas berhasil dibatalkan.');
       setShowConfirmCancel(false);
       navigate('/dashboard/task/active');
-    } catch {
-      toast.error('Gagal membatalkan tugas.');
+    } catch (error: any) {
+      toast.error(error.message || 'Gagal membatalkan tugas.');
     }
   };
 
@@ -170,8 +170,8 @@ export default function TaskDetailPage() {
       await completeRequest.mutateAsync(task.id);
       setShowConfirmComplete(false);
       setShowSuccessModal(true);
-    } catch {
-      toast.error('Gagal menyelesaikan tugas.');
+    } catch (error: any) {
+      toast.error(error.message || 'Gagal menyelesaikan tugas.');
     }
   };
 

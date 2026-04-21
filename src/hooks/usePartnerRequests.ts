@@ -273,15 +273,20 @@ export function useWeighItems() {
     mutationFn: async (items: WeighItemInput[]) => {
       for (const item of items) {
         const subtotal = item.realWeight * item.priceAtTime;
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from('pickup_request_items')
           .update({
             real_weight: item.realWeight,
             subtotal,
           })
-          .eq('id', item.itemId);
+          .eq('id', item.itemId)
+          .select();
 
         if (error) throw error;
+        // RLS silent failure check
+        if (!data || data.length === 0) {
+          throw new Error(`Gagal update item ${item.itemId}. Pastikan kebijakan RLS (Row Level Security) mengizinkan UPDATE.`);
+        }
       }
     },
     onSuccess: () => {
@@ -309,7 +314,7 @@ export function useCompleteRequest() {
       const totalPrice = (items ?? []).reduce((sum, i) => sum + (i.subtotal ?? 0), 0);
 
       // 2. Update the request header
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('pickup_requests')
         .update({
           status: 'completed',
@@ -318,9 +323,13 @@ export function useCompleteRequest() {
           completed_at: new Date().toISOString(),
         })
         .eq('id', requestId)
-        .eq('status', 'accepted');
+        .eq('status', 'accepted')
+        .select();
 
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Gagal update status tugas. Kemungkinan terhalang kebijakan RLS.');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['partner-active-tasks'] });
