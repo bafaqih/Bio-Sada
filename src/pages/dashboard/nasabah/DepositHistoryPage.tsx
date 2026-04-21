@@ -25,6 +25,16 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/dialog';
 
 // ── Status badge config ──────────────────────────────────────
 
@@ -189,16 +199,40 @@ export default function DepositHistoryPage() {
                     </TableCell>
                     <TableCell className="text-center">
                       {req.status === 'pending' ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleCancel(req.id)}
-                          disabled={cancelRequest.isPending}
-                          className="h-7 gap-1 text-xs text-red-500 hover:bg-red-50 hover:text-red-700"
-                        >
-                          <XCircle className="h-3.5 w-3.5" />
-                          Batalkan
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              disabled={cancelRequest.isPending}
+                              className="h-7 gap-1 text-xs text-red-500 hover:bg-red-50 hover:text-red-700"
+                            >
+                              <XCircle className="h-3.5 w-3.5" />
+                              Batalkan
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Membatalkan Request</DialogTitle>
+                              <DialogDescription>
+                                Apakah Anda yakin ingin membatalkan request penjemputan ini? Tindakan ini tidak dapat diurungkan.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button variant="outline">Kembali</Button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <Button
+                                  variant="destructive"
+                                  onClick={() => handleCancel(req.id)}
+                                >
+                                  Ya, Batalkan
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       ) : (
                         <span className="text-xs text-gray-300">—</span>
                       )}
