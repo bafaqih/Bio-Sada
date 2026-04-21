@@ -107,25 +107,24 @@ export function useUserDetail(userId: string | undefined) {
     queryFn: async () => {
       if (!userId) return null;
 
-      // Fetch profile
-      const { data: profile, error: profileErr } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, username, phone_number, avatar_url, role, is_verified, created_at')
+        .select(`
+          id, full_name, username, phone_number, avatar_url, role, is_verified, created_at,
+          addresses(*)
+        `)
         .eq('id', userId)
         .single();
-      if (profileErr) throw profileErr;
+      
+      if (error) throw error;
 
-      // Fetch addresses
-      const { data: addresses, error: addrErr } = await supabase
-        .from('addresses')
-        .select('*')
-        .eq('profile_id', userId)
-        .order('is_primary', { ascending: false });
-      if (addrErr) throw addrErr;
+      // Ensure addresses are sorted if needed, though usually frontend sorts or finds primary
+      const addresses = data.addresses ?? [];
+      addresses.sort((a: any, b: any) => (b.is_primary ? 1 : -1) - (a.is_primary ? 1 : -1));
 
       return {
-        ...(profile as ProfileWithCreatedAt),
-        addresses: addresses ?? [],
+        ...(data as any),
+        addresses,
       } as ProfileWithAddress;
     },
     enabled: !!userId,
