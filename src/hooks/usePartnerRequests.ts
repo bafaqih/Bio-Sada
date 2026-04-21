@@ -203,7 +203,7 @@ export function useTaskDetail(taskId: string | undefined) {
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number, avatar_url),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
         `)
         .eq('id', taskId!)

@@ -35,6 +35,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Table,
   TableBody,
@@ -61,6 +62,15 @@ const STATUS_CONFIG: Record<RequestStatus, { label: string; className: string }>
 };
 
 // ── Helpers ──────────────────────────────────────────────────
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
 
 const formatCurrency = (num: number | null) => {
   if (num == null) return '-';
@@ -106,6 +116,7 @@ export default function TaskDetailPage() {
   const [showConfirmCancel, setShowConfirmCancel] = useState(false);
   const [showConfirmComplete, setShowConfirmComplete] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
   const [weighData, setWeighData] = useState<Record<string, number>>({});
 
   // Initialize weigh data from existing real_weight values
@@ -246,16 +257,20 @@ export default function TaskDetailPage() {
       {/* Section 1: Customer Info + Actions */}
       <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
         <CardContent className="p-5">
+          <h3 className="text-base font-semibold text-gray-800 mb-4">Profil Nasabah</h3>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             {/* Customer info */}
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                  <User className="h-5 w-5" />
-                </div>
+                <Avatar className="h-12 w-12 border border-emerald-200">
+                  <AvatarImage src={task.customer?.avatar_url ?? undefined} alt={task.customer?.full_name ?? 'Nasabah'} />
+                  <AvatarFallback className="bg-emerald-100 text-emerald-600 font-semibold">
+                    {getInitials(task.customer?.full_name ?? 'N')}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">{task.customer?.full_name ?? 'Nasabah'}</h2>
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <h2 className="text-lg font-bold leading-none text-gray-900">{task.customer?.full_name ?? 'Nasabah'}</h2>
+                  <div className="mt-1.5 flex items-center gap-1 text-sm text-gray-500">
                     <Phone className="h-3.5 w-3.5" />
                     +{task.customer?.phone_number ?? '-'}
                   </div>
@@ -306,7 +321,10 @@ export default function TaskDetailPage() {
               <ImageIcon className="h-4 w-4 text-gray-400" /> Foto Sampah
             </Label>
             {task.waste_photo_url ? (
-              <div className="overflow-hidden rounded-lg border border-gray-200">
+              <div 
+                className="overflow-hidden rounded-lg border border-gray-200 cursor-pointer"
+                onClick={() => setShowImageModal(true)}
+              >
                 <img
                   src={task.waste_photo_url}
                   alt="Foto sampah"
@@ -602,6 +620,22 @@ export default function TaskDetailPage() {
               Tutup
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Image Dialog ────────────────────────────────────── */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-3xl p-1 bg-transparent border-none shadow-none [&>button]:right-4 [&>button]:top-4 [&>button]:bg-white/50 [&>button]:rounded-full [&>button]:text-gray-900 hover:[&>button]:bg-white">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Foto Sampah Diperbesar</DialogTitle>
+          </DialogHeader>
+          {task?.waste_photo_url && (
+            <img 
+              src={task.waste_photo_url} 
+              alt="Foto Sampah Diperbesar"
+              className="w-full h-auto max-h-[85vh] object-contain rounded-xl"
+            />
+          )}
         </DialogContent>
       </Dialog>
     </motion.div>

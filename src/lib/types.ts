@@ -97,9 +97,8 @@ export interface PartnerStats {
   totalCustomersServed: number;
 }
 
-/** Extended pickup request with joined customer + address data for partner dashboard */
 export interface PickupRequestWithDetails extends PickupRequest {
-  customer?: Pick<Profile, 'full_name' | 'phone_number'>;
+  customer?: Pick<Profile, 'full_name' | 'phone_number' | 'avatar_url'>;
   address?: Pick<Address, 'address_detail' | 'city' | 'latitude' | 'longitude'>;
   items?: PickupRequestItem[];
 }
