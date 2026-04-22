@@ -178,93 +178,95 @@ export default function ProfilePage() {
           <Separator className="my-6" />
 
           {/* ── Section 3: Addresses ───────────────────── */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-800">Alamat Saya</h3>
-              {!(profile?.role === 'partners' && (addresses?.length ?? 0) >= 1) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowNewAddress(true)}
-                  className="h-8 gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
-                >
-                  <Plus className="h-3.5 w-3.5" /> Tambah Alamat
-                </Button>
-              )}
-            </div>
-
-            {addressesLoading ? (
-              <div className="space-y-3">
-                <Skeleton className="h-20 w-full rounded-lg" />
-                <Skeleton className="h-20 w-full rounded-lg" />
-              </div>
-            ) : addresses && addresses.length > 0 ? (
-              <div className="space-y-3">
-                {addresses.map((addr) => (
-                  <div
-                    key={addr.id}
-                    className="relative rounded-lg border border-gray-200 bg-gray-50/50 p-4 transition-colors hover:border-emerald-200"
+          {profile?.role !== 'admin' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold text-gray-800">Alamat Saya</h3>
+                {!(profile?.role === 'partners' && (addresses?.length ?? 0) >= 1) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowNewAddress(true)}
+                    className="h-8 gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="mt-0.5 rounded-full bg-emerald-100 p-1.5 text-emerald-600">
-                          <MapPin className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-gray-900">{addr.label}</span>
-                            {addr.is_primary && (
-                              <Badge variant="secondary" className="h-5 bg-emerald-100 px-1.5 text-[10px] text-emerald-700">
-                                <Star className="mr-0.5 h-2.5 w-2.5" /> Utama
-                              </Badge>
-                            )}
+                    <Plus className="h-3.5 w-3.5" /> Tambah Alamat
+                  </Button>
+                )}
+              </div>
+
+              {addressesLoading ? (
+                <div className="space-y-3">
+                  <Skeleton className="h-20 w-full rounded-lg" />
+                  <Skeleton className="h-20 w-full rounded-lg" />
+                </div>
+              ) : addresses && addresses.length > 0 ? (
+                <div className="space-y-3">
+                  {addresses.map((addr) => (
+                    <div
+                      key={addr.id}
+                      className="relative rounded-lg border border-gray-200 bg-gray-50/50 p-4 transition-colors hover:border-emerald-200"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <div className="mt-0.5 rounded-full bg-emerald-100 p-1.5 text-emerald-600">
+                            <MapPin className="h-4 w-4" />
                           </div>
-                          <p className="mt-1 text-sm text-gray-600">{addr.address_detail}</p>
-                          <p className="mt-0.5 text-xs text-gray-500">
-                            {addr.city}, {addr.province} {addr.postal_code}
-                          </p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-semibold text-gray-900">{addr.label}</span>
+                              {addr.is_primary && (
+                                <Badge variant="secondary" className="h-5 bg-emerald-100 px-1.5 text-[10px] text-emerald-700">
+                                  <Star className="mr-0.5 h-2.5 w-2.5" /> Utama
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="mt-1 text-sm text-gray-600">{addr.address_detail}</p>
+                            <p className="mt-0.5 text-xs text-gray-500">
+                              {addr.city}, {addr.province} {addr.postal_code}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-gray-400 hover:bg-emerald-50 hover:text-emerald-600"
-                          onClick={() => setEditingAddress(addr)}
-                          title="Edit Alamat"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        {profile?.role !== 'partners' && (
+                        <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-600"
-                            onClick={() => handleDeleteAddress(addr.id)}
-                            disabled={deleteAddress.isPending}
-                            title="Hapus Alamat"
+                            className="h-8 w-8 text-gray-400 hover:bg-emerald-50 hover:text-emerald-600"
+                            onClick={() => setEditingAddress(addr)}
+                            title="Edit Alamat"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" />
                           </Button>
-                        )}
+                          {profile?.role !== 'partners' && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                              onClick={() => handleDeleteAddress(addr.id)}
+                              disabled={deleteAddress.isPending}
+                              title="Hapus Alamat"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-lg border border-dashed border-gray-300 py-6 text-center">
-                <p className="text-sm text-gray-500">Belum ada alamat tersimpan.</p>
-                <Button
-                  variant="link"
-                  className="mt-1 text-emerald-600"
-                  onClick={() => setShowNewAddress(true)}
-                >
-                  Tambah Alamat Sekarang
-                </Button>
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-lg border border-dashed border-gray-300 py-6 text-center">
+                  <p className="text-sm text-gray-500">Belum ada alamat tersimpan.</p>
+                  <Button
+                    variant="link"
+                    className="mt-1 text-emerald-600"
+                    onClick={() => setShowNewAddress(true)}
+                  >
+                    Tambah Alamat Sekarang
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -7,6 +8,8 @@ import {
   MapPin,
   CalendarDays,
   Package,
+  StickyNote,
+  ImageIcon,
 } from 'lucide-react';
 
 import { useTransactionDetail } from '@/hooks/useAdminTransactions';
@@ -25,6 +28,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 // ── Helpers ─────────────────────────────────────────────────
 
@@ -85,6 +94,7 @@ export default function TransactionDetailPage() {
   const navigate = useNavigate();
 
   const { data: tx, isLoading } = useTransactionDetail(id);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   if (isLoading) {
     return (
@@ -215,16 +225,6 @@ export default function TransactionDetailPage() {
               </div>
             </div>
 
-            {/* Notes */}
-            {tx.notes && (
-              <>
-                <Separator className="my-4" />
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Catatan</p>
-                  <p className="text-sm text-gray-600">{tx.notes}</p>
-                </div>
-              </>
-            )}
           </CardContent>
         </Card>
       </motion.div>
@@ -304,23 +304,85 @@ export default function TransactionDetailPage() {
         </Card>
       </motion.div>
 
-      {/* Waste Photo */}
-      {tx.waste_photo_url && (
-        <motion.div variants={itemVariants}>
-          <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold text-gray-800">Foto Sampah</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <img
-                src={tx.waste_photo_url}
-                alt="Foto sampah"
-                className="max-h-64 rounded-lg object-cover"
-              />
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+      {/* Waste Photo & Notes Grid */}
+      <motion.div variants={itemVariants} className="grid gap-4 sm:grid-cols-2">
+        {/* Photo Card */}
+        <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <ImageIcon className="h-4 w-4 text-emerald-600" />
+              Foto Sampah
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {tx.waste_photo_url ? (
+              <div 
+                className="overflow-hidden rounded-lg border border-gray-100 cursor-pointer"
+                onClick={() => setShowImageModal(true)}
+              >
+                <img
+                  src={tx.waste_photo_url}
+                  alt="Foto sampah"
+                  className="h-48 w-full object-cover transition-transform hover:scale-105"
+                />
+              </div>
+            ) : (
+              <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50">
+                <span className="text-sm text-gray-400">Tidak ada foto</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Notes Card */}
+        <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardContent className="p-5 flex flex-col gap-4">
+            <div>
+              <p className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-1.5">
+                <StickyNote className="h-4 w-4 text-emerald-600" />
+                Catatan
+              </p>
+              <div className="rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {tx.notes || "Tidak ada catatan."}
+                </p>
+              </div>
+            </div>
+            
+            <Separator />
+            
+            {/* Additional Info (Optional, but makes it consistent with mitra view) */}
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Status Transaksi</span>
+                <Badge variant="secondary" className={statusConfig.className + " text-[10px] h-5"}>
+                  {statusConfig.label}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500">Metode Pickup</span>
+                <span className="font-medium text-gray-800 text-xs">Penjemputan Langsung</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Image Dialog */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-3xl p-1 bg-transparent border-none shadow-none [&>button]:right-4 [&>button]:top-4 [&>button]:bg-white/50 [&>button]:rounded-full [&>button]:text-gray-900 hover:[&>button]:bg-white">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Foto Sampah Diperbesar</DialogTitle>
+          </DialogHeader>
+          {tx.waste_photo_url && (
+            <img 
+              src={tx.waste_photo_url} 
+              alt="Foto Sampah Diperbesar"
+              className="w-full h-auto max-h-[85vh] object-contain rounded-xl"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
