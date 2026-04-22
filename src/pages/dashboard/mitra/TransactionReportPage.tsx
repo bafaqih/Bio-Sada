@@ -118,24 +118,55 @@ function generateExcel(
   endMonth: number,
   endYear: number,
 ) {
-  const rows = data.map((row, index) => ({
-    'No': index + 1,
-    'ID Transaksi': row.request_id,
-    'Tanggal Selesai': formatDateTime(row.completed_at),
-    'Bulan': row.report_month?.trim() ?? '',
-    'Tahun': row.report_year?.trim() ?? '',
-    'Nama Pelanggan': row.customer_name,
-    'No. HP Pelanggan': row.customer_phone ?? '-',
-    'Alamat': row.address_detail,
-    'Kota': row.city,
-    'Kategori Sampah': row.waste_category,
-    'Berat Riil (kg)': row.real_weight,
-    'Harga per Kg (Rp)': row.price_at_time,
-    'Subtotal (Rp)': row.subtotal,
-    'Total Transaksi (Rp)': row.total_request_amount,
-  }));
+  // We need to keep track of request groups to assign "No" correctly and handle merges
+  const rows: any[] = [];
+  const merges: XLSX.Range[] = [];
+  
+  let currentNo = 0;
+  let lastRequestId = '';
+
+  data.forEach((row) => {
+    if (row.request_id !== lastRequestId) {
+      currentNo++;
+      lastRequestId = row.request_id;
+      
+      // Calculate how many rows this request has
+      const requestRows = data.filter(d => d.request_id === row.request_id).length;
+      if (requestRows > 1) {
+        const startR = rows.length + 1; // +1 for header
+        const endR = startR + requestRows - 1;
+        
+        // Columns to merge: No (0), ID Transaksi (1), Tanggal Selesai (2), Bulan (3), Tahun (4), 
+        // Nama Pelanggan (5), No. HP Pelanggan (6), Alamat (7), Kota (8), Total Transaksi (13)
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 13].forEach(col => {
+          merges.push({
+            s: { r: startR, c: col },
+            e: { r: endR, c: col }
+          });
+        });
+      }
+    }
+
+    rows.push({
+      'No': currentNo,
+      'ID Transaksi': row.request_id,
+      'Tanggal Selesai': formatDateTime(row.completed_at),
+      'Bulan': row.report_month?.trim() ?? '',
+      'Tahun': row.report_year?.trim() ?? '',
+      'Nama Pelanggan': row.customer_name,
+      'No. HP Pelanggan': row.customer_phone ?? '-',
+      'Alamat': row.address_detail,
+      'Kota': row.city,
+      'Kategori Sampah': row.waste_category,
+      'Berat Riil (kg)': row.real_weight,
+      'Harga per Kg (Rp)': row.price_at_time,
+      'Subtotal (Rp)': row.subtotal,
+      'Total Transaksi (Rp)': row.total_request_amount,
+    });
+  });
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
+  worksheet['!merges'] = merges;
 
   // Auto-size columns
   const colWidths = Object.keys(rows[0] ?? {}).map((key) => {
@@ -188,17 +219,33 @@ export default function TransactionReportPage() {
 
   const items = reportData ?? [];
 
-  // Group rows by request_id for visual grouping
-  const groupedRequestIds = useMemo(() => {
-    const seen = new Map<string, number>();
-    let groupIndex = 0;
+  // Group rows for UI display (1 row per request)
+  const uiItems = useMemo(() => {
+    const groups: Record<string, {
+      request_id: string;
+      completed_at: string;
+      customer_name: string;
+      categories: string[];
+      total_weight: number;
+      total_amount: number;
+    }> = {};
+
     items.forEach((item) => {
-      if (!seen.has(item.request_id)) {
-        seen.set(item.request_id, groupIndex);
-        groupIndex++;
+      if (!groups[item.request_id]) {
+        groups[item.request_id] = {
+          request_id: item.request_id,
+          completed_at: item.completed_at,
+          customer_name: item.customer_name,
+          categories: [],
+          total_weight: 0,
+          total_amount: item.total_request_amount,
+        };
       }
+      groups[item.request_id].categories.push(item.waste_category);
+      groups[item.request_id].total_weight += item.real_weight;
     });
-    return seen;
+
+    return Object.values(groups);
   }, [items]);
 
   // Summary stats
@@ -317,7 +364,7 @@ export default function TransactionReportPage() {
 
         <div className="ml-auto flex items-center gap-1.5 text-xs text-gray-400">
           <Search className="h-3.5 w-3.5" />
-          <span>{items.length} data ditemukan</span>
+          <span>{uiItems.length} transaksi ditemukan</span>
         </div>
       </div>
 
@@ -368,9 +415,7 @@ export default function TransactionReportPage() {
                 <TableHead>ID Transaksi</TableHead>
                 <TableHead>Nasabah</TableHead>
                 <TableHead>Kategori</TableHead>
-                <TableHead className="text-right">Berat (kg)</TableHead>
-                <TableHead className="text-right">Harga/kg</TableHead>
-                <TableHead className="text-right">Subtotal</TableHead>
+                <TableHead className="text-right">Total Berat (kg)</TableHead>
                 <TableHead className="text-right">Total Transaksi</TableHead>
               </TableRow>
             </TableHeader>
@@ -383,15 +428,13 @@ export default function TransactionReportPage() {
                     <TableCell><Skeleton className="h-4 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-4 w-28" /></TableCell>
                     <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                    <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-14" /></TableCell>
-                    <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-20" /></TableCell>
                     <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-20" /></TableCell>
                     <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-24" /></TableCell>
                   </TableRow>
                 ))
-              ) : items.length === 0 ? (
+              ) : uiItems.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="py-16 text-center">
+                  <TableCell colSpan={7} className="py-16 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
                         <PackageOpen className="h-7 w-7 text-gray-300" />
@@ -406,18 +449,15 @@ export default function TransactionReportPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                items.map((row, index) => {
-                  const groupIdx = groupedRequestIds.get(row.request_id) ?? 0;
-                  const isEvenGroup = groupIdx % 2 === 0;
+                uiItems.map((row, index) => {
+                  const categoryText = row.categories.length > 1 
+                    ? `${row.categories[0]} + ${row.categories.length - 1} lainnya` 
+                    : row.categories[0];
 
                   return (
                     <TableRow
-                      key={`${row.request_id}-${row.waste_category}-${index}`}
-                      className={`transition-colors ${
-                        isEvenGroup
-                          ? 'bg-white hover:bg-emerald-50/30'
-                          : 'bg-gray-50/50 hover:bg-emerald-50/30'
-                      }`}
+                      key={row.request_id}
+                      className="transition-colors hover:bg-emerald-50/30"
                     >
                       <TableCell className="text-center text-sm text-gray-400">
                         {index + 1}
@@ -435,20 +475,14 @@ export default function TransactionReportPage() {
                       </TableCell>
                       <TableCell>
                         <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
-                          {row.waste_category}
+                          {categoryText}
                         </span>
                       </TableCell>
                       <TableCell className="text-right text-sm font-medium text-gray-800">
-                        {row.real_weight?.toFixed(1) ?? '-'}
-                      </TableCell>
-                      <TableCell className="text-right text-sm text-gray-600">
-                        {formatCurrency(row.price_at_time)}
-                      </TableCell>
-                      <TableCell className="text-right text-sm font-medium text-gray-800">
-                        {formatCurrency(row.subtotal)}
+                        {row.total_weight.toFixed(1)}
                       </TableCell>
                       <TableCell className="text-right text-sm font-semibold text-emerald-700">
-                        {formatCurrency(row.total_request_amount)}
+                        {formatCurrency(row.total_amount)}
                       </TableCell>
                     </TableRow>
                   );
@@ -459,10 +493,10 @@ export default function TransactionReportPage() {
         </div>
 
         {/* Bottom Info */}
-        {!isLoading && items.length > 0 && (
+        {!isLoading && uiItems.length > 0 && (
           <div className="border-t border-gray-100 px-4 py-3">
             <p className="text-sm text-gray-500">
-              Menampilkan <span className="font-medium text-gray-700">{items.length}</span> baris data untuk{' '}
+              Menampilkan <span className="font-medium text-gray-700">{uiItems.length}</span> transaksi untuk{' '}
               <span className="font-medium text-gray-700">{getMonthLabel(filterMonth)} {filterYear}</span>
             </p>
           </div>
