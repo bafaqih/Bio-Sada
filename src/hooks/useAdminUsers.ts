@@ -31,7 +31,7 @@ export function usePartnerList({ verified, page, pageSize }: UsePartnerListOptio
       // Data
       let query = supabase
         .from('profiles')
-        .select('id, full_name, username, phone_number, avatar_url, role, is_verified, created_at')
+        .select('id, full_name, username, phone_number, email, avatar_url, role, is_verified, created_at')
         .eq('role', 'partners')
         .eq('is_verified', verified)
         .order('created_at', { ascending: false });
@@ -78,7 +78,7 @@ export function useCustomerList({ page, pageSize }: UseCustomerListOptions) {
 
       let query = supabase
         .from('profiles')
-        .select('id, full_name, username, phone_number, avatar_url, role, is_verified, created_at')
+        .select('id, full_name, username, phone_number, email, avatar_url, role, is_verified, created_at')
         .eq('role', 'customers')
         .order('created_at', { ascending: false });
 
@@ -110,7 +110,7 @@ export function useUserDetail(userId: string | undefined) {
       const { data, error } = await supabase
         .from('profiles')
         .select(`
-          id, full_name, username, phone_number, avatar_url, role, is_verified, created_at,
+          id, full_name, username, phone_number, email, avatar_url, role, is_verified, created_at,
           addresses(*)
         `)
         .eq('id', userId)

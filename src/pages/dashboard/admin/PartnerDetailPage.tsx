@@ -5,6 +5,8 @@ import {
   ArrowLeft,
   User,
   Phone,
+  Mail,
+  Shield,
   MapPin,
   CalendarDays,
   Weight,
@@ -15,6 +17,7 @@ import {
   Loader2,
   ShieldCheck,
   ShieldX,
+  Star,
 } from 'lucide-react';
 
 import { useUserDetail, useUserDetailStats, useApprovePartner, useRejectPartner } from '@/hooks/useAdminUsers';
@@ -24,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 // ── Helpers ─────────────────────────────────────────────────
 
@@ -59,6 +63,22 @@ const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
+
+// ── InfoRow Component ───────────────────────────────────────
+
+function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-gray-400 shadow-sm">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-medium text-gray-500">{label}</p>
+        <div className="truncate text-sm font-semibold text-gray-800">{value}</div>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Partner detail page for admin.
@@ -114,8 +134,6 @@ export default function PartnerDetailPage() {
     );
   }
 
-  const primaryAddr = user.addresses?.find((a) => a.is_primary) ?? user.addresses?.[0];
-
   return (
     <motion.div
       initial="hidden"
@@ -123,65 +141,46 @@ export default function PartnerDetailPage() {
       variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
       className="space-y-6"
     >
-      {/* Back Button */}
-      <motion.div variants={itemVariants}>
+      <div>
         <Button
           variant="ghost"
           onClick={() => navigate('/dashboard/management/partner')}
-          className="gap-1 text-gray-500 hover:text-emerald-600"
+          className="mb-4 gap-1 text-gray-500 hover:text-emerald-600 -ml-3"
         >
           <ArrowLeft className="h-4 w-4" /> Kembali ke Daftar Mitra
         </Button>
-      </motion.div>
+        <h1 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 md:text-2xl">
+          <User className="h-6 w-6 text-emerald-600" />
+          Detail Mitra
+        </h1>
+      </div>
 
-      {/* Profile Card */}
       <motion.div variants={itemVariants}>
-        <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
           <CardContent className="p-6">
-            <div className="flex flex-col items-center gap-6 sm:flex-row">
-              {/* Avatar */}
-              <Avatar className="h-20 w-20 border-4 border-emerald-200 shadow-md">
-                <AvatarImage src={user.avatar_url ?? undefined} alt={user.full_name} />
-                <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-xl font-bold text-white">
-                  {getInitials(user.full_name)}
-                </AvatarFallback>
-              </Avatar>
-
-              {/* Info */}
-              <div className="flex-1 text-center sm:text-left">
-                <div className="flex flex-col items-center gap-2 sm:flex-row">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+                <Avatar className="h-24 w-24 border-2 border-emerald-200">
+                  <AvatarImage src={user.avatar_url ?? undefined} alt={user.full_name} />
+                  <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-2xl font-bold text-white">
+                    {getInitials(user.full_name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 text-center sm:mt-2 sm:text-left">
                   <h2 className="text-xl font-bold text-gray-900">{user.full_name}</h2>
-                  <Badge
-                    variant="secondary"
-                    className={
-                      user.is_verified
-                        ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100'
-                        : 'bg-amber-100 text-amber-700 hover:bg-amber-100'
-                    }
-                  >
-                    {user.is_verified ? 'Terverifikasi' : 'Belum Diverifikasi'}
-                  </Badge>
-                </div>
-
-                <div className="mt-3 space-y-1.5 text-sm text-gray-500">
-                  <p className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-gray-400" />
-                    @{user.username ?? '-'}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-gray-400" />
-                    {user.phone_number ?? '-'}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <CalendarDays className="h-4 w-4 text-gray-400" />
-                    Bergabung {formatDate(user.created_at)}
-                  </p>
+                  <p className="text-sm text-gray-500">@{user.username ?? '-'}</p>
+                  <div className="mt-2 flex items-center justify-center gap-2 sm:justify-start">
+                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
+                      Mitra Pengepul
+                    </Badge>
+                  </div>
                 </div>
               </div>
 
               {/* Approve/Reject Actions */}
               {!user.is_verified && (
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row shrink-0">
                   <Button
                     onClick={handleApprove}
                     disabled={approveMutation.isPending}
@@ -208,6 +207,93 @@ export default function PartnerDetailPage() {
                 </div>
               )}
             </div>
+
+            <Separator className="my-6" />
+
+            {/* Personal Information Grid */}
+            <div className="space-y-4">
+              <h3 className="text-base font-semibold text-gray-800">Informasi Pribadi</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <InfoRow icon={User} label="Nama Lengkap" value={user.full_name} />
+                <InfoRow icon={User} label="Username" value={user.username ?? '-'} />
+                <InfoRow icon={Phone} label="Nomor Telepon" value={user.phone_number ? `+${user.phone_number}` : '-'} />
+                <InfoRow icon={Mail} label="Email" value={user.email ?? '-'} />
+                <InfoRow icon={Shield} label="Role" value="Mitra Pengepul" />
+                <InfoRow icon={CalendarDays} label="Bergabung Sejak" value={formatDate(user.created_at)} />
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Address List */}
+            <div className="space-y-4">
+              <h3 className="text-base font-semibold text-gray-800">Daftar Alamat</h3>
+              {!user.addresses || user.addresses.length === 0 ? (
+                <div className="rounded-lg border border-dashed border-gray-300 py-6 text-center">
+                  <p className="text-sm text-gray-500">Belum ada alamat tersimpan.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {user.addresses.map((addr) => (
+                    <div
+                      key={addr.id}
+                      className="relative rounded-lg border border-gray-200 bg-gray-50/50 p-4 transition-colors hover:border-emerald-200"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="mt-0.5 rounded-full bg-emerald-100 p-1.5 text-emerald-600">
+                          <MapPin className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-gray-900">{addr.label}</span>
+                            {addr.is_primary && (
+                              <Badge variant="secondary" className="h-5 bg-emerald-100 px-1.5 text-[10px] text-emerald-700">
+                                <Star className="mr-0.5 h-2.5 w-2.5" /> Utama
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="mt-1 text-sm text-gray-600">{addr.address_detail}</p>
+                          <p className="mt-0.5 text-xs text-gray-500">
+                            {addr.city}, {addr.province} {addr.postal_code}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Verification Info */}
+      <motion.div variants={itemVariants}>
+        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              {user.is_verified ? (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+                    <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-emerald-700">Akun Terverifikasi</p>
+                    <p className="text-xs text-gray-500">Akun ini telah terverifikasi sebagai Mitra resmi dan dapat diandalkan oleh nasabah mulai dari tanggal <strong>{formatDate(user.created_at)}</strong>.</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                    <ShieldX className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-700">Menunggu Verifikasi</p>
+                    <p className="text-xs text-gray-400">Akun mitra ini belum disetujui. Gunakan tombol Terima atau Tolak pada bagian profil atas.</p>
+                  </div>
+                </>
+              )}
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -215,7 +301,7 @@ export default function PartnerDetailPage() {
       {/* Stats Cards */}
       <motion.div variants={itemVariants}>
         <div className="grid gap-4 sm:grid-cols-3">
-          <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+          <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Total Tugas</CardTitle>
               <ClipboardCheck className="h-5 w-5 text-emerald-500" />
@@ -226,7 +312,7 @@ export default function PartnerDetailPage() {
               )}
             </CardContent>
           </Card>
-          <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+          <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Total Berat</CardTitle>
               <Weight className="h-5 w-5 text-teal-500" />
@@ -237,7 +323,7 @@ export default function PartnerDetailPage() {
               )}
             </CardContent>
           </Card>
-          <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
+          <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">Total Nilai</CardTitle>
               <Wallet className="h-5 w-5 text-green-500" />
@@ -249,68 +335,6 @@ export default function PartnerDetailPage() {
             </CardContent>
           </Card>
         </div>
-      </motion.div>
-
-      {/* Address Section */}
-      <motion.div variants={itemVariants}>
-        <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base font-semibold text-gray-800">
-              <MapPin className="h-5 w-5 text-emerald-600" /> Alamat
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {!primaryAddr ? (
-              <p className="text-sm text-gray-400">Belum ada alamat yang terdaftar.</p>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
-                    {primaryAddr.label}
-                  </Badge>
-                  {primaryAddr.is_primary && (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-100">Utama</Badge>
-                  )}
-                </div>
-                <p className="text-sm text-gray-700">{primaryAddr.address_detail}</p>
-                <p className="text-xs text-gray-400">
-                  {primaryAddr.city}, {primaryAddr.province} {primaryAddr.postal_code}
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Verification Info */}
-      <motion.div variants={itemVariants}>
-        <Card className="border-emerald-100/60 bg-white/80 shadow-sm backdrop-blur-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              {user.is_verified ? (
-                <>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
-                    <ShieldCheck className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-emerald-700">Akun Terverifikasi</p>
-                    <p className="text-xs text-gray-400">Mitra ini sudah disetujui oleh admin dan dapat menerima tugas.</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-                    <ShieldX className="h-5 w-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-amber-700">Menunggu Verifikasi</p>
-                    <p className="text-xs text-gray-400">Akun mitra ini belum disetujui. Gunakan tombol Terima atau Tolak di atas.</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
       </motion.div>
     </motion.div>
   );
