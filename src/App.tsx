@@ -11,6 +11,7 @@ import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
 import NewPasswordPage from '@/pages/auth/NewPasswordPage';
+import LandingPage from '@/pages/landingpage/LandingPage';
 
 // Dashboard infrastructure
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
@@ -49,29 +50,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// ── Temporary landing page (will be replaced later) ─────────
 
-function LandingPage() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-10">
-      <h1 className="text-3xl font-bold text-gray-900">Landing Page Bio-Sada</h1>
-      <div className="flex gap-4">
-        <a
-          href="/login"
-          className="rounded-xl bg-emerald-600 px-6 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-700"
-        >
-          Masuk
-        </a>
-        <a
-          href="/register"
-          className="rounded-xl border-2 border-emerald-600 px-6 py-2.5 font-semibold text-emerald-600 transition-colors hover:bg-emerald-50"
-        >
-          Daftar
-        </a>
-      </div>
-    </div>
-  );
-}
 
 // ── Full-screen loading state while auth initializes ────────
 
