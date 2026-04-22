@@ -15,7 +15,6 @@ import {
   Loader2,
   ImageIcon,
   StickyNote,
-  User,
   BadgeCheck,
 } from 'lucide-react';
 
