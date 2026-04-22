@@ -92,7 +92,7 @@ export function usePendingRequestsPreview(limit = 5) {
         .from('pickup_requests')
         .select(`
           id, customers_id, pickup_date, pickup_time, total_weight, status, created_at,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city)
         `)
         .eq('status', 'pending')

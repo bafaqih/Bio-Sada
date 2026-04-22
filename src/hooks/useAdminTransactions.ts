@@ -37,8 +37,8 @@ export function useAllTransactions({ status, page, pageSize }: UseAllTransaction
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
-          partner:profiles!pickup_requests_partners_id_fkey(full_name, phone_number),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          partner:public_profiles!pickup_requests_partners_id_fkey(full_name, phone_number),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city)
         `)
         .order('created_at', { ascending: false });
@@ -81,8 +81,8 @@ export function useTransactionDetail(transactionId: string | undefined) {
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
-          partner:profiles!pickup_requests_partners_id_fkey(full_name, phone_number),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          partner:public_profiles!pickup_requests_partners_id_fkey(full_name, phone_number),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city)
         `)
         .eq('id', transactionId)

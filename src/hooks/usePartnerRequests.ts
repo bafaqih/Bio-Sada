@@ -13,7 +13,7 @@ export function usePendingRequests() {
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
         `)
         .eq('status', 'pending')
@@ -90,7 +90,7 @@ export function usePartnerActiveTasks(partnerId: string | undefined) {
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
         `)
         .eq('partners_id', partnerId!)
@@ -164,7 +164,7 @@ export function usePartnerTaskHistory({ partnerId, page, pageSize }: UsePartnerT
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
         `)
         .eq('partners_id', partnerId!)
@@ -203,7 +203,7 @@ export function useTaskDetail(taskId: string | undefined) {
         .from('pickup_requests')
         .select(`
           *,
-          customer:profiles!pickup_requests_customers_id_fkey(full_name, phone_number, avatar_url),
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number, avatar_url),
           address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
         `)
         .eq('id', taskId!)
