@@ -27,6 +27,7 @@ import ProfilePage from '@/pages/dashboard/nasabah/ProfilePage';
 import ActiveTasksPage from '@/pages/dashboard/mitra/ActiveTasksPage';
 import TaskDetailPage from '@/pages/dashboard/mitra/TaskDetailPage';
 import TaskHistoryPage from '@/pages/dashboard/mitra/TaskHistoryPage';
+import TransactionReportPage from '@/pages/dashboard/mitra/TransactionReportPage';
 
 // Admin pages
 import AdminWasteListPage from '@/pages/dashboard/admin/AdminWasteListPage';
@@ -164,6 +165,9 @@ function AppRoutes() {
             <Route path="/dashboard/task/active" element={<ActiveTasksPage />} />
             <Route path="/dashboard/task/history" element={<TaskHistoryPage />} />
             <Route path="/dashboard/task/:id" element={<TaskDetailPage />} />
+
+            {/* Partner report routes */}
+            <Route path="/dashboard/report/transaction" element={<TransactionReportPage />} />
           </Route>
         </Route>
 

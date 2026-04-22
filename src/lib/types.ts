@@ -132,3 +132,24 @@ export interface TransactionWithDetails extends PickupRequest {
   address?: Pick<Address, 'address_detail' | 'city'>;
   items?: PickupRequestItem[];
 }
+
+// ── Report Types ─────────────────────────────────────────────
+
+/** Row from the `monthly_partner_report` Supabase view */
+export interface MonthlyPartnerReport {
+  partner_id: string;
+  request_id: string;
+  completed_at: string;
+  report_month: string;   // e.g. "January  " (TO_CHAR padded)
+  report_year: string;    // e.g. "2026"
+  customer_name: string;
+  customer_phone: string | null;
+  address_detail: string;
+  city: string;
+  waste_category: string;
+  real_weight: number;
+  price_at_time: number;
+  subtotal: number;
+  total_request_amount: number;
+  final_status: string;
+}

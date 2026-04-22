@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Map,
   ClipboardList,
+  FileSpreadsheet,
   Loader2,
   Hourglass,
   RefreshCw,
@@ -103,6 +104,14 @@ const NAV_ITEMS: Record<UserRole, NavItem[]> = {
       subItems: [
         { label: 'Tugas Aktif', href: '/dashboard/task/active' },
         { label: 'Riwayat Tugas', href: '/dashboard/task/history' },
+      ],
+    },
+    {
+      label: 'Laporan',
+      icon: FileSpreadsheet,
+      matchPrefix: true,
+      subItems: [
+        { label: 'Laporan Transaksi', href: '/dashboard/report/transaction' },
       ],
     },
   ],
@@ -204,6 +213,7 @@ export default function DashboardLayout() {
   const getPageTitle = () => {
     if (location.pathname === '/dashboard/profile') return 'Profil Saya';
     if (location.pathname.startsWith('/dashboard/task/') && location.pathname !== '/dashboard/task/active' && location.pathname !== '/dashboard/task/history') return 'Detail Tugas';
+    if (location.pathname === '/dashboard/report/transaction') return 'Laporan Transaksi';
     // Admin detail pages
     if (location.pathname.match(/^\/dashboard\/management\/partner\/.+/)) return 'Detail Mitra';
     if (location.pathname.match(/^\/dashboard\/management\/customer\/.+/)) return 'Detail Nasabah';
