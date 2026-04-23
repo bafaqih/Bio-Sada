@@ -32,7 +32,7 @@ export default function LandingPage() {
         <meta property="og:url" content="https://bio-sada.com/" />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
         <Navbar />
         <main>
           <HeroSection />
