@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 const NAV_LINKS = [
   { label: 'Beranda', href: '#beranda' },
   { label: 'Tentang', href: '#tentang' },
-  { label: 'Layanan', href: '#layanan' },
   { label: 'Harga Sampah', href: '#harga-sampah' },
+  { label: 'Cara Kerja', href: '#cara-kerja' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Kontak', href: '#kontak' },
 ];
