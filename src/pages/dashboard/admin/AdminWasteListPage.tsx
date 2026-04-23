@@ -202,7 +202,7 @@ export default function AdminWasteListPage() {
                   <TableCell className="text-right font-semibold text-emerald-700">
                     {formatCurrency(item.price_per_kg)}/{item.unit}
                   </TableCell>
-                  <TableCell className="hidden text-sm text-gray-500 md:table-cell">
+                  <TableCell className="hidden max-w-xs whitespace-normal break-words text-sm text-gray-500 md:table-cell">
                     {item.description ?? '-'}
                   </TableCell>
                   <TableCell className="text-center">
