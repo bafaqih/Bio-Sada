@@ -34,15 +34,21 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 const STATS = [
-  { key: 'totalWasteCollected' as const, label: 'Total Sampah Terkumpul', suffix: ' kg', icon: Recycle, gradient: 'from-emerald-500 to-teal-600' },
-  { key: 'totalActiveCustomers' as const, label: 'Nasabah Aktif', suffix: '', icon: Users, gradient: 'from-teal-500 to-green-600' },
-  { key: 'totalVerifiedPartners' as const, label: 'Mitra Terverifikasi', suffix: '', icon: Handshake, gradient: 'from-green-500 to-emerald-600' },
+  { key: 'total_waste' as const, label: 'Total Sampah Terkumpul', suffix: '+ kg', icon: Recycle, gradient: 'from-emerald-500 to-teal-600' },
+  { key: 'total_customers' as const, label: 'Nasabah Aktif', suffix: '+', icon: Users, gradient: 'from-teal-500 to-green-600' },
+  { key: 'total_partners' as const, label: 'Mitra Terverifikasi', suffix: '+', icon: Handshake, gradient: 'from-green-500 to-emerald-600' },
 ];
 
 export default function StatsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const { data: stats } = useLandingStats();
+
+  useEffect(() => {
+    if (stats) {
+      console.log('Stats:', stats.total_waste, stats.total_customers, stats.total_partners);
+    }
+  }, [stats]);
 
   return (
     <section className="relative py-20 sm:py-28">
