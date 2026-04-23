@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Tag } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { useActiveWasteCategories } from '@/hooks/useWasteCategories';
 import { Skeleton } from '@/components/ui/skeleton';
 
