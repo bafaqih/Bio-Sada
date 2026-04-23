@@ -113,7 +113,7 @@ export default function WastePricingSection() {
         {/* Carousel Container */}
         <div className="relative">
           {isLoading ? (
-            <div className="flex gap-6 overflow-hidden pb-4">
+            <div className="flex gap-6 overflow-hidden pb-4 -mx-4 px-[calc((100vw-16rem)/2)] sm:mx-0 sm:px-0">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="w-64 flex-shrink-0 rounded-2xl border border-gray-100 bg-white p-5">
                   <Skeleton className="h-36 w-full rounded-xl" />
@@ -131,7 +131,7 @@ export default function WastePricingSection() {
                 onMouseLeave={() => setIsPaused(false)}
                 onTouchStart={() => setIsPaused(true)}
                 onTouchEnd={() => setIsPaused(false)}
-                className="scrollbar-hide flex snap-x snap-proximity gap-6 overflow-x-auto pb-8 pt-4"
+                className="scrollbar-hide flex snap-x snap-mandatory sm:snap-proximity gap-6 overflow-x-auto pb-8 pt-4 -mx-4 px-[calc((100vw-16rem)/2)] sm:mx-0 sm:px-0"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {displayItems.map((item, i) => (
@@ -141,7 +141,7 @@ export default function WastePricingSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.4, delay: (i % totalItems) * 0.05 }}
-                    className="w-64 flex-shrink-0 snap-start rounded-2xl border border-emerald-100/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-lg sm:w-72"
+                    className="w-64 flex-shrink-0 snap-center sm:snap-start rounded-2xl border border-emerald-100/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-lg sm:w-72"
                   >
                     {/* Image */}
                     <div className="relative h-36 w-full overflow-hidden rounded-xl bg-emerald-50">
