@@ -4,13 +4,13 @@ import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
 
 const CONTACT_INFO = [
   { icon: Phone, label: 'WhatsApp', value: '+62 812-3456-7890', href: 'https://wa.me/6281234567890' },
-  { icon: Mail, label: 'Email', value: 'info@bio-sada.com', href: 'mailto:info@bio-sada.com' },
+  { icon: Mail, label: 'Email', value: 'biosadacom@gmail.com', href: 'mailto:biosadacom@gmail.com' },
   { icon: MapPin, label: 'Alamat', value: 'Jl. Veteran No.1, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145', href: null },
 ];
 
 const SOCIALS = [
   { label: 'WhatsApp', href: 'https://wa.me/6281234567890', icon: MessageCircle },
-  { label: 'Email', href: 'mailto:info@bio-sada.com', icon: Mail },
+  { label: 'Email', href: 'mailto:biosadacom@gmail.com', icon: Mail },
 ];
 
 export default function ContactSection() {
@@ -43,7 +43,7 @@ export default function ContactSection() {
           >
             <iframe
               title="Lokasi Bio-Sada"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.364!2d112.614!3d-7.966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629a7a3c0e4e3%3A0x3030bfbcaf770b0!2sMalang%2C+Kota+Malang%2C+Jawa+Timur!5e0!3m2!1sid!2sid!4v1"
+              src="https://www.google.com/maps?q=Malang,+Jawa+Timur&output=embed" 
               width="100%"
               height="340"
               style={{ border: 0 }}
