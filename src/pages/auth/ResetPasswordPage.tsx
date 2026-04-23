@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { KeyRound, ArrowLeft, Loader2, Mail } from 'lucide-react';
@@ -56,6 +57,9 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 px-4 py-8">
+      <Helmet>
+        <title>Reset Kata Sandi | Bio-Sada</title>
+      </Helmet>
       {/* Dekorasi latar belakang (Sama seperti halaman auth lainnya) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-200/30 blur-3xl" />

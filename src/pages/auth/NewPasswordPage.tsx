@@ -1,5 +1,6 @@
 import { useState, type FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -74,6 +75,9 @@ export default function NewPasswordPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 px-4 py-8">
+      <Helmet>
+        <title>Kata Sandi Baru | Bio-Sada</title>
+      </Helmet>
       {/* Dekorasi latar belakang */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-200/30 blur-3xl" />
