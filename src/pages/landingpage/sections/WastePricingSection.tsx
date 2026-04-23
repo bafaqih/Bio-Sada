@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Tag } from 'lucide-react';
 import { useActiveWasteCategories } from '@/hooks/useWasteCategories';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -103,7 +104,12 @@ export default function WastePricingSection() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center mb-12"
         >
-          <span className="text-sm font-semibold uppercase tracking-wider text-emerald-600">Harga Sampah</span>
+          <div className="mb-4 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
+              <Tag className="h-3.5 w-3.5" />
+              Harga Sampah
+            </span>
+          </div>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Jenis Sampah & Harga Real-Time
           </h2>

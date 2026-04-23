@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const FAQ_ITEMS = [
   {
@@ -69,7 +69,12 @@ export default function FaqSection() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <span className="text-sm font-semibold uppercase tracking-wider text-emerald-600">FAQ</span>
+          <div className="mb-4 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
+              <HelpCircle className="h-3.5 w-3.5" />
+              FAQ
+            </span>
+          </div>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Pertanyaan yang Sering Diajukan
           </h2>

@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Shield, Leaf, Smartphone, Users } from 'lucide-react';
+import { Shield, Leaf, Smartphone, Users, Info } from 'lucide-react';
 
 const VALUES = [
   { icon: Shield, title: 'Transparansi', desc: 'Harga sampah ditampilkan secara real-time dan transparan untuk setiap transaksi.', color: 'emerald' },
@@ -29,7 +29,12 @@ export default function AboutSection() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="text-sm font-semibold uppercase tracking-wider text-emerald-600">Tentang Kami</span>
+          <div className="mb-4 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
+              <Info className="h-3.5 w-3.5" />
+              Tentang Kami
+            </span>
+          </div>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Apa Itu Bio-Sada?
           </h2>

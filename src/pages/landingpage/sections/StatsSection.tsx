@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Recycle, Users, Handshake } from 'lucide-react';
+import { Recycle, Users, Handshake, BarChart3 } from 'lucide-react';
 import { useLandingStats } from '@/hooks/useLandingStats';
 
 /** Animated counter that counts up when in view */
@@ -59,9 +59,12 @@ export default function StatsSection() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-2xl text-center mb-16"
         >
-          <span className="text-sm font-bold uppercase tracking-wider text-emerald-600">
-            Statistik Real-time
-          </span>
+          <div className="mb-4 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
+              <BarChart3 className="h-3.5 w-3.5" />
+              Statistik Real-time
+            </span>
+          </div>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Dampak Nyata <span className="text-emerald-600">Bio-Sada</span>
           </h2>
