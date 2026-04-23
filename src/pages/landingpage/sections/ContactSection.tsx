@@ -5,7 +5,7 @@ import { MapPin, Phone, Mail, MessageSquare } from 'lucide-react';
 const CONTACT_INFO = [
   { icon: Phone, label: 'WhatsApp', value: '+62 812-3456-7890', href: 'https://wa.me/6281234567890' },
   { icon: Mail, label: 'Email', value: 'biosadacom@gmail.com', href: 'mailto:biosadacom@gmail.com' },
-  { icon: MapPin, label: 'Alamat', value: 'Jl. Veteran No.1, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145', href: null },
+  { icon: MapPin, label: 'Alamat', value: 'Universitas Negeri Malang, Jl. Cakrawala No.5, Sumbersari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145', href: null },
 ];
 
 const SOCIALS = [
@@ -85,7 +85,7 @@ export default function ContactSection() {
           >
             <iframe
               title="Lokasi Bio-Sada"
-              src="https://www.google.com/maps?q=Malang,+Jawa+Timur&output=embed" 
+              src="https://www.google.com/maps?q=Universitas+Negeri+Malang,+Jl.+Cakrawala+No.5,+Sumbersari,+Kec.+Lowokwaru,+Kota+Malang,+Jawa+Timur+65145&output=embed" 
               width="100%"
               height="100%"
               style={{ border: 0, display: 'block' }}
@@ -111,7 +111,7 @@ export default function ContactSection() {
                 <div>
                   <p className="text-sm font-medium text-gray-400">{item.label}</p>
                   {item.href ? (
-                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-0.5 text-base font-semibold text-gray-900 transition-colors hover:text-emerald-600">
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="mt-0.5 text-base font-normal text-gray-900 transition-colors hover:text-emerald-600">
                       {item.value}
                     </a>
                   ) : (
