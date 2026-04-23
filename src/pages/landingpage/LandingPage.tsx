@@ -9,6 +9,7 @@ import HowItWorksSection from './sections/HowItWorksSection';
 import FaqSection from './sections/FaqSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
+import ScrollToTop from '@/components/shared/ScrollToTop';
 
 /**
  * Landing page — public, SEO-friendly single-page layout for Bio-Sada.
@@ -43,6 +44,7 @@ export default function LandingPage() {
           <ContactSection />
         </main>
         <Footer />
+        <ScrollToTop />
       </div>
     </>
   );
