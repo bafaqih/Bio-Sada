@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { MapPin, Phone, Mail, MessageCircle, MessageSquare } from 'lucide-react';
+import { MapPin, Phone, Mail, MessageSquare } from 'lucide-react';
 
 const CONTACT_INFO = [
   { icon: Phone, label: 'WhatsApp', value: '+62 812-3456-7890', href: 'https://wa.me/6281234567890' },
@@ -9,8 +9,45 @@ const CONTACT_INFO = [
 ];
 
 const SOCIALS = [
-  { label: 'WhatsApp', href: 'https://wa.me/6281234567890', icon: MessageCircle },
-  { label: 'Email', href: 'mailto:biosadacom@gmail.com', icon: Mail },
+  { 
+    label: 'Instagram', 
+    href: 'https://instagram.com/biosadaofficial', 
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+      </svg>
+    )
+  },
+  { 
+    label: 'TikTok', 
+    href: 'https://tiktok.com/@biosadaofficial', 
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+      </svg>
+    )
+  },
+  { 
+    label: 'Facebook', 
+    href: 'https://facebook.com/biosadaofficial', 
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+      </svg>
+    )
+  },
+  { 
+    label: 'X (Twitter)', 
+    href: 'https://x.com/biosadaofficial', 
+    icon: (props: any) => (
+      <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4l11.733 16h4.267l-11.733-16z" />
+        <path d="M4 20l6.768-6.768m2.464-2.464l6.768-6.768" />
+      </svg>
+    )
+  },
 ];
 
 export default function ContactSection() {
@@ -44,18 +81,18 @@ export default function ContactSection() {
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="overflow-hidden rounded-2xl border border-emerald-100/60 shadow-sm"
+            className="h-full min-h-[340px] overflow-hidden rounded-2xl border border-emerald-100/60 shadow-sm"
           >
             <iframe
               title="Lokasi Bio-Sada"
               src="https://www.google.com/maps?q=Malang,+Jawa+Timur&output=embed" 
               width="100%"
-              height="340"
-              style={{ border: 0 }}
+              height="100%"
+              style={{ border: 0, display: 'block' }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="w-full"
+              className="h-full w-full"
             />
           </motion.div>
 
