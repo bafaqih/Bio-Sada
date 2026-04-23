@@ -28,8 +28,11 @@ export default function LandingPage() {
         <link rel="canonical" href="https://bio-sada.com/" />
         <meta property="og:title" content="Bio-Sada | Bank Sampah Digital" />
         <meta property="og:description" content="Ubah sampahmu jadi cuan! ♻️ Gabung di Bio-Sada, platform bank sampah digital yang praktis dengan layanan penjemputan langsung ke rumahmu." />
+        <meta property="og:image" content="/og-image.png" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bio-sada.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="/og-image.png" />
       </Helmet>
 
       <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
