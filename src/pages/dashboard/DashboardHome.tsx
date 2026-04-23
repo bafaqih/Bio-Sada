@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
@@ -463,9 +462,6 @@ export default function DashboardHome() {
       animate="visible"
       className="space-y-6"
     >
-      <Helmet>
-        <title>Dashboard | Bio-Sada</title>
-      </Helmet>
       {/* Greeting Section */}
       <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">

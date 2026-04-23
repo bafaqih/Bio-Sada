@@ -1,6 +1,7 @@
 // DashboardLayout.tsx
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import {
   Home,
@@ -231,6 +232,9 @@ export default function DashboardLayout() {
 
   return (
     <TooltipProvider>
+      <Helmet>
+        <title>Dashboard | Bio-Sada</title>
+      </Helmet>
       <SidebarProvider>
         {/* ── Sidebar ──────────────────────────────────── */}
         <Sidebar collapsible="icon" className="border-r-emerald-100">
