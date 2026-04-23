@@ -130,22 +130,6 @@ export default function HeroSection() {
             Pelajari Lebih Lanjut
           </button>
         </motion.div>
-
-        {/* Animated recycle logo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.7, type: 'spring', stiffness: 120, damping: 14 }}
-          className="mt-12 flex justify-center"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-2xl shadow-emerald-500/30 sm:h-24 sm:w-24"
-          >
-            <Recycle className="h-10 w-10 text-white sm:h-12 sm:w-12" />
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );
