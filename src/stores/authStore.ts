@@ -25,6 +25,8 @@ interface AuthActions {
 
 type AuthStore = AuthState & AuthActions;
 
+let authListener: { data: { subscription: any } } | null = null;
+
 export const useAuthStore = create<AuthStore>((set, get) => ({
   // ── State ──────────────────────────────────────────────
   session: null,
@@ -35,57 +37,86 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   // ── Actions ────────────────────────────────────────────
 
   fetchProfile: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('id, full_name, username, role, is_verified, phone_number, avatar_url')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, username, role, is_verified, phone_number, avatar_url')
+        .eq('id', userId)
+        .single();
 
-    if (error) {
-      console.error('[authStore] Failed to fetch profile:', error.message);
-      set({ profile: null });
-      return;
+      if (error) {
+        console.error('[authStore] Failed to fetch profile:', error.message);
+        if (error.code === 'PGRST116') {
+          set({ profile: null });
+        }
+        return;
+      }
+
+      set({ profile: data as Profile });
+    } catch (err) {
+      console.error('[authStore] Unexpected error fetching profile:', err);
     }
-
-    set({ profile: data as Profile });
   },
 
   initializeAuth: async () => {
     const { fetchProfile } = get();
 
-    // 1. Check existing session on app load (handles page refresh)
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session?.user) {
-      set({ session });
-      await fetchProfile(session.user.id);
+    // Prevent double initialization
+    if (get().isInitialized && authListener) {
+      return () => {};
     }
 
-    set({ isLoading: false, isInitialized: true });
+    try {
+      set({ isLoading: true });
+      
+      // 1. Initial Session Check
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        set({ session });
+        await fetchProfile(session.user.id);
+      }
+    } catch (err) {
+      console.error('[authStore] Initialization error:', err);
+    } finally {
+      set({ isLoading: false, isInitialized: true });
+    }
 
-    // 2. Listen for future auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
-        set({ session: newSession });
+    // 2. Set up singleton listener
+    if (!authListener) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, newSession) => {
+          // Sync session immediately
+          set({ session: newSession });
 
-        if (event === 'SIGNED_IN' && newSession?.user) {
-          await fetchProfile(newSession.user.id);
-        }
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+            if (newSession?.user) {
+              // Call fetchProfile without 'await' to avoid blocking the auth state transition
+              fetchProfile(newSession.user.id);
+            }
+          }
 
-        if (event === 'SIGNED_OUT') {
-          set({ profile: null, session: null });
-        }
+          if (event === 'SIGNED_OUT') {
+            set({ profile: null, session: null });
+          }
+        },
+      );
+      authListener = { data: { subscription } };
+    }
 
-        // TOKEN_REFRESHED is already handled by setting the new session above
-      },
-    );
-
-    // Return unsubscribe function for cleanup in useEffect
-    return () => subscription.unsubscribe();
+    return () => {
+      // In a singleton pattern, we typically don't unsubscribe on component unmount
+      // as the store lives for the app's lifetime.
+    };
   },
 
   logout: async () => {
-    await supabase.auth.signOut();
-    set({ session: null, profile: null });
+    try {
+      // Set profile/session to null immediately to update UI instantly
+      set({ session: null, profile: null });
+      // Clear Supabase session
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('[authStore] Logout error:', err);
+    }
   },
 }));

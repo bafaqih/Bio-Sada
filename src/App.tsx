@@ -67,15 +67,7 @@ function AppRoutes() {
   const { initializeAuth } = useAuthStore();
 
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-
-    initializeAuth().then((unsub) => {
-      unsubscribe = unsub;
-    });
-
-    return () => {
-      unsubscribe?.();
-    };
+    initializeAuth();
   }, [initializeAuth]);
 
   return (

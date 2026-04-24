@@ -31,9 +31,35 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  // Profile is not fetched yet — wait (should be quick since isInitialized is true)
+  // Profile is not fetched yet
   if (!profile) {
-    return <LoadingScreen />;
+    // If we've already initialized and have a session, but still no profile,
+    // it might be a data fetch error. Show a more helpful state than just a spinner.
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-50 p-4 text-center">
+        <LoadingScreen />
+        <div className="max-w-xs animate-in fade-in duration-700 slide-in-from-bottom-4">
+          <p className="text-sm text-gray-500">
+            Mengambil data profil... Jika ini berlangsung lama, silakan coba segarkan halaman.
+          </p>
+          <div className="mt-4 flex gap-2 justify-center">
+            <button 
+              onClick={() => window.location.reload()}
+              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-4"
+            >
+              Segarkan Halaman
+            </button>
+            <span className="text-gray-300">|</span>
+            <button 
+              onClick={() => useAuthStore.getState().logout()}
+              className="text-xs font-semibold text-red-600 hover:text-red-700 underline underline-offset-4"
+            >
+              Keluar Akun
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Role check: if allowedRoles is provided, verify user has permission
