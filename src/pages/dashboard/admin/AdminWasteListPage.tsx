@@ -66,10 +66,21 @@ export default function AdminWasteListPage() {
   const [editItem, setEditItem] = useState<WasteCategory | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<WasteCategory | null>(null);
 
-  const { data: result, isLoading } = useAllWasteCategories({
+  const { data: result, isLoading, isError, refetch } = useAllWasteCategories({
     page: currentPage,
     pageSize,
   });
+
+  // Handle Error with interactive toast
+  if (isError) {
+    toast.error('Gagal memuat data.', {
+      id: 'fetch-waste-error', // avoid duplicates
+      action: {
+        label: 'Coba Lagi',
+        onClick: () => refetch(),
+      },
+    });
+  }
   const deleteMutation = useDeleteWasteCategory();
 
   const items = result?.data ?? [];

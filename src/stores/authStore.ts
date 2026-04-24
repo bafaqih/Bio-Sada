@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 import type { Profile } from '@/lib/types';
 
 interface AuthState {
   session: Session | null;
   profile: Profile | null;
   isLoading: boolean;
+  isFetchingProfile: boolean;
   isInitialized: boolean;
 }
 
@@ -32,12 +34,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   session: null,
   profile: null,
   isLoading: true,
+  isFetchingProfile: false,
   isInitialized: false,
 
   // ── Actions ────────────────────────────────────────────
 
   fetchProfile: async (userId: string) => {
     try {
+      set({ isFetchingProfile: true });
       const { data, error } = await supabase
         .from('profiles')
         .select('id, full_name, username, role, is_verified, phone_number, avatar_url')
@@ -55,6 +59,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ profile: data as Profile });
     } catch (err) {
       console.error('[authStore] Unexpected error fetching profile:', err);
+    } finally {
+      set({ isFetchingProfile: false });
     }
   },
 
@@ -71,9 +77,20 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       
       // 1. Initial Session Check
       const { data: { session } } = await supabase.auth.getSession();
+      
       if (session?.user) {
-        set({ session });
-        await fetchProfile(session.user.id);
+        // Explicit check for expiration
+        const expiresAt = session.expires_at || 0;
+        const now = Math.floor(Date.now() / 1000);
+        
+        if (expiresAt < now) {
+          console.log('[authStore] Session expired, logging out...');
+          toast.error('Sesi Anda telah habis, harap masuk kembali.');
+          await get().logout();
+        } else {
+          set({ session });
+          await fetchProfile(session.user.id);
+        }
       }
     } catch (err) {
       console.error('[authStore] Initialization error:', err);
