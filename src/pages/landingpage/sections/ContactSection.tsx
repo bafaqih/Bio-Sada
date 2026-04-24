@@ -105,7 +105,7 @@ export default function ContactSection() {
           >
             {CONTACT_INFO.map((item, i) => (
               <div key={i} className="group flex items-start gap-4 rounded-xl border border-emerald-100/60 bg-white/80 p-5 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 transition-transform group-hover:scale-110">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 transition-transform group-hover:scale-110">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <div>

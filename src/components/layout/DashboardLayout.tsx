@@ -268,7 +268,7 @@ function DashboardLayoutContent() {
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="lg" asChild className="group-data-[collapsible=icon]:!p-0">
+                <SidebarMenuButton size="lg" asChild className="group-data-[collapsible=icon]:p-0!">
                   <Link to="/dashboard" id="sidebar-logo">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center">
                       <img 
@@ -388,7 +388,7 @@ function DashboardLayoutContent() {
                     >
                       <Avatar className="h-8 w-8 rounded-full border-2 border-emerald-200">
                         <AvatarImage src={profile?.avatar_url ?? undefined} alt={profile?.full_name ?? ''} />
-                        <AvatarFallback className="rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-xs font-semibold text-white">
+                        <AvatarFallback className="rounded-full bg-linear-to-br from-emerald-500 to-teal-600 text-xs font-semibold text-white">
                           {getInitials(profile?.full_name ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
@@ -456,7 +456,7 @@ function DashboardLayoutContent() {
           </header>
 
           {/* Page Content */}
-          <div className="flex-1 overflow-x-hidden bg-gradient-to-br from-gray-50/50 via-white to-emerald-50/30 p-4 md:p-6">
+          <div className="flex-1 overflow-x-hidden bg-linear-to-br from-gray-50/50 via-white to-emerald-50/30 p-4 md:p-6">
             <Outlet />
           </div>
         </SidebarInset>
@@ -465,7 +465,7 @@ function DashboardLayoutContent() {
       {/* Global No-Address Warning for Customers & Partners */}
       {needsAddress && (
         <Dialog open={true} onOpenChange={() => { }}>
-          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
+          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-100" onInteractOutside={(e) => e.preventDefault()}>
             <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-4">
                 <Map className="h-8 w-8 text-amber-600" />
@@ -486,7 +486,7 @@ function DashboardLayoutContent() {
                   setHidePrompt(true);
                   navigate('/dashboard/profile', { state: { openNewAddress: true } });
                 }}
-                className="h-12 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
+                className="h-12 w-full bg-linear-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
               >
                 Atur Alamat Sekarang <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
@@ -498,7 +498,7 @@ function DashboardLayoutContent() {
       {/* Partner Approval Gate — blocks all features until admin approves */}
       {needsApproval && (
         <Dialog open={true} onOpenChange={() => { }}>
-          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
+          <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-100" onInteractOutside={(e) => e.preventDefault()}>
             <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mb-4 animate-pulse">
                 <Hourglass className="h-8 w-8 text-blue-600" />
@@ -515,7 +515,7 @@ function DashboardLayoutContent() {
                 size="lg"
                 onClick={handleRefreshApproval}
                 disabled={isRefreshing}
-                className="h-12 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-base font-semibold text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700 hover:shadow-blue-500/30 disabled:opacity-60"
+                className="h-12 w-full bg-linear-to-r from-blue-500 to-indigo-600 text-base font-semibold text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700 hover:shadow-blue-500/30 disabled:opacity-60"
               >
                 {isRefreshing ? (
                   <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Memeriksa...</>

@@ -84,7 +84,7 @@ export default function StatsSection() {
               className="group relative"
             >
               <div className="relative h-full overflow-hidden rounded-2xl border border-emerald-100/60 bg-white/80 p-6 text-center shadow-sm backdrop-blur-sm transition-all hover:border-emerald-200 hover:shadow-md">
-                <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.gradient} shadow-md shadow-emerald-500/10 mb-5 transition-transform group-hover:scale-110`}>
+                <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br ${stat.gradient} shadow-md shadow-emerald-500/10 mb-5 transition-transform group-hover:scale-110`}>
                   <stat.icon className="h-7 w-7 text-white" />
                 </div>
                 

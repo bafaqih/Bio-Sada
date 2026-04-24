@@ -34,7 +34,7 @@ function FaqItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
       >
         <span className="pr-4 text-base font-semibold text-gray-900">{q}</span>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="h-5 w-5 flex-shrink-0 text-emerald-500" />
+          <ChevronDown className="h-5 w-5 shrink-0 text-emerald-500" />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
@@ -61,7 +61,7 @@ export default function FaqSection() {
 
   return (
     <section id="faq" className="relative py-20 sm:py-28">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-emerald-50/30 to-white" />
+      <div className="absolute inset-0 bg-linear-to-b from-white via-emerald-50/30 to-white" />
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}

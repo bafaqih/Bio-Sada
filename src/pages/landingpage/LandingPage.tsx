@@ -35,7 +35,7 @@ export default function LandingPage() {
         <meta name="twitter:image" content="/og-image.png" />
       </Helmet>
 
-      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+      <div className="min-h-screen overflow-x-hidden bg-linear-to-br from-emerald-50 via-white to-teal-50">
         <Navbar />
         <main>
           <HeroSection />

@@ -126,7 +126,7 @@ export default function Navbar() {
           className="flex items-center gap-2.5"
         >
           <img src="/Bio-Sada.svg" alt="Bio-Sada" className="h-9 w-9 rounded-lg" />
-          <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold tracking-tight text-transparent">
+          <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold tracking-tight text-transparent">
             Bio-Sada
           </span>
         </a>
@@ -167,7 +167,7 @@ export default function Navbar() {
             </Button>
           </Link>
           <Link to="/register">
-            <Button size="sm" className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20 hover:from-emerald-600 hover:to-teal-700">
+            <Button size="sm" className="gap-2 bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20 hover:from-emerald-600 hover:to-teal-700">
               <UserPlus className="h-4 w-4" />
               Daftar
             </Button>
@@ -229,7 +229,7 @@ export default function Navbar() {
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsOpen(false)}>
-                  <Button size="sm" className="w-full gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                  <Button size="sm" className="w-full gap-2 bg-linear-to-r from-emerald-500 to-teal-600 text-white">
                     <UserPlus className="h-4 w-4" />
                     Daftar
                   </Button>

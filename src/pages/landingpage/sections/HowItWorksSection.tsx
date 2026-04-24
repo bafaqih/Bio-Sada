@@ -36,7 +36,7 @@ export default function HowItWorksSection() {
 
         <div className="relative mt-14">
           {/* Connector line (desktop) */}
-          <div className="absolute top-16 right-0 left-0 hidden h-0.5 bg-gradient-to-r from-emerald-200 via-teal-300 to-emerald-200 lg:block" />
+          <div className="absolute top-16 right-0 left-0 hidden h-0.5 bg-linear-to-r from-emerald-200 via-teal-300 to-emerald-200 lg:block" />
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
@@ -48,7 +48,7 @@ export default function HowItWorksSection() {
                 className="group relative flex flex-col items-center text-center"
               >
                 {/* Step number circle */}
-                <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25 transition-transform group-hover:scale-110">
+                <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25 transition-transform group-hover:scale-110">
                   <step.icon className="h-7 w-7 text-white" />
                 </div>
                 {/* Step badge */}

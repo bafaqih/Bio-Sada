@@ -136,7 +136,7 @@ export default function AdminWasteListPage() {
         </div>
         <Button
           onClick={handleAdd}
-          className="gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+          className="gap-1.5 bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
         >
           <Plus className="h-4 w-4" />
           Tambah Jenis
@@ -213,7 +213,7 @@ export default function AdminWasteListPage() {
                   <TableCell className="text-right font-semibold text-emerald-700">
                     {formatCurrency(item.price_per_kg)}/{item.unit}
                   </TableCell>
-                  <TableCell className="max-w-[150px] whitespace-normal break-words text-sm text-gray-500 md:max-w-xs">
+                  <TableCell className="max-w-[150px] whitespace-normal wrap-break-word text-sm text-gray-500 md:max-w-xs">
                     {item.description ?? '-'}
                   </TableCell>
                   <TableCell className="text-center">

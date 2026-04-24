@@ -77,7 +77,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 px-4 py-8">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-emerald-50 via-white to-teal-50 px-4 py-8">
       <Helmet>
         <title>Masuk | Bio-Sada</title>
       </Helmet>
@@ -101,7 +101,7 @@ export default function LoginPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.15 }}
-              className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25"
+              className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25"
             >
               <Recycle className="h-8 w-8 text-white" />
             </motion.div>
@@ -179,7 +179,7 @@ export default function LoginPage() {
                     <div
                       className={`pointer-events-none absolute inset-0 rounded transition-all duration-200 ${
                         rememberMe
-                          ? 'border-transparent bg-gradient-to-r from-emerald-500 to-teal-600'
+                          ? 'border-transparent bg-linear-to-r from-emerald-500 to-teal-600'
                           : 'border border-gray-300 bg-white group-hover:border-emerald-400'
                       }`}
                     />
@@ -213,7 +213,7 @@ export default function LoginPage() {
                 id="btn-login"
                 disabled={sedangMemuat}
                 size="lg"
-                className="h-12 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-60"
+                className="h-12 w-full bg-linear-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-60"
               >
                 {sedangMemuat ? (
                   <>

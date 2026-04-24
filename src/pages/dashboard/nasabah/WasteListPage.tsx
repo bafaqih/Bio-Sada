@@ -147,7 +147,7 @@ export default function WasteListPage() {
                   <TableCell className="text-right font-semibold text-emerald-700">
                     {formatCurrency(item.price_per_kg)}/{item.unit}
                   </TableCell>
-                  <TableCell className="max-w-[150px] whitespace-normal break-words text-sm text-gray-500 md:max-w-xs">
+                  <TableCell className="max-w-[150px] whitespace-normal wrap-break-word text-sm text-gray-500 md:max-w-xs">
                     {item.description ?? '-'}
                   </TableCell>
                 </TableRow>

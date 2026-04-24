@@ -87,7 +87,7 @@ export default function HeroSection() {
           className="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl md:text-6xl"
         >
           Ubah Sampahmu{' '}
-          <span className="bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent">
             Jadi Cuan!
           </span>{' '}
           <motion.span
@@ -118,7 +118,7 @@ export default function HeroSection() {
           className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <Link to="/register">
-            <Button size="lg" className="group h-12 gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 px-7 text-base font-semibold text-white shadow-xl shadow-emerald-500/25 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-2xl hover:shadow-emerald-500/30">
+            <Button size="lg" className="group h-12 gap-2 bg-linear-to-r from-emerald-500 to-teal-600 px-7 text-base font-semibold text-white shadow-xl shadow-emerald-500/25 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-2xl hover:shadow-emerald-500/30">
               Mulai Sekarang
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>

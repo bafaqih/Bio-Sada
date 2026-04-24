@@ -455,7 +455,7 @@ function PartnerDashboard() {
                         <Button
                           size="sm"
                           onClick={() => setConfirmAccept(req)}
-                          className="h-8 bg-gradient-to-r from-emerald-500 to-teal-600 text-xs font-semibold text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+                          className="h-8 bg-linear-to-r from-emerald-500 to-teal-600 text-xs font-semibold text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
                         >
                           Ambil Tugas
                         </Button>
@@ -486,7 +486,7 @@ function PartnerDashboard() {
             <Button
               onClick={handleAcceptTask}
               disabled={acceptRequest.isPending}
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+              className="bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
             >
               {acceptRequest.isPending ? (
                 <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Memproses...</>

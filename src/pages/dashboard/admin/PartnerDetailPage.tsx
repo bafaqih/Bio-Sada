@@ -219,7 +219,7 @@ export default function PartnerDetailPage() {
               <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
                 <Avatar className="h-24 w-24 border-2 border-emerald-200">
                   <AvatarImage src={user.avatar_url ?? undefined} alt={user.full_name} />
-                  <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-2xl font-bold text-white">
+                  <AvatarFallback className="bg-linear-to-br from-emerald-500 to-teal-600 text-2xl font-bold text-white">
                     {getInitials(user.full_name)}
                   </AvatarFallback>
                 </Avatar>
@@ -245,7 +245,7 @@ export default function PartnerDetailPage() {
                     <>
                       <Button
                         onClick={() => setIsAcceptOpen(true)}
-                        className="gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+                        className="gap-1.5 bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
                       >
                         <CheckCircle2 className="h-4 w-4" /> Terima
                       </Button>
@@ -377,7 +377,7 @@ export default function PartnerDetailPage() {
             <Button
               onClick={handleApprove}
               disabled={approveMutation.isPending}
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+              className="bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
             >
               {approveMutation.isPending ? (
                 <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Memproses...</>

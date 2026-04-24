@@ -9,7 +9,7 @@ export default function NotFoundPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+    <div className="min-h-screen flex flex-col bg-linear-to-br from-emerald-50 via-white to-teal-50">
       <Navbar />
       
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-40 min-h-[75vh] relative overflow-hidden">
@@ -22,7 +22,7 @@ export default function NotFoundPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-6xl md:text-[150px] font-extrabold leading-none bg-gradient-to-b from-emerald-500 to-teal-600 bg-clip-text text-transparent select-none">
+              <h1 className="text-6xl md:text-[150px] font-extrabold leading-none bg-linear-to-b from-emerald-500 to-teal-600 bg-clip-text text-transparent select-none">
                 404
               </h1>
             </motion.div>
@@ -53,7 +53,7 @@ export default function NotFoundPage() {
             <Link to="/">
               <Button 
                 size="lg"
-                className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 h-11 px-6 text-sm"
+                className="gap-2 bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 h-11 px-6 text-sm"
               >
                 <Home className="h-4 w-4" />
                 Kembali ke Beranda

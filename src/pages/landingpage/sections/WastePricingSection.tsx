@@ -94,7 +94,7 @@ export default function WastePricingSection() {
 
   return (
     <section id="harga-sampah" className="relative py-20 overflow-hidden sm:py-28">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-emerald-50/30 to-white" />
+      <div className="absolute inset-0 bg-linear-to-b from-white via-emerald-50/30 to-white" />
       
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" ref={ref}>
         {/* Header */}
@@ -121,7 +121,7 @@ export default function WastePricingSection() {
           {isLoading ? (
             <div className="flex gap-6 overflow-hidden pb-4 -mx-4 px-[calc((100vw-16rem)/2)] sm:mx-0 sm:px-0">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="w-64 flex-shrink-0 rounded-2xl border border-gray-100 bg-white p-5">
+                <div key={i} className="w-64 shrink-0 rounded-2xl border border-gray-100 bg-white p-5">
                   <Skeleton className="h-36 w-full rounded-xl" />
                   <Skeleton className="mt-4 h-5 w-32" />
                   <Skeleton className="mt-2 h-4 w-24" />
@@ -147,7 +147,7 @@ export default function WastePricingSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.4, delay: (i % totalItems) * 0.05 }}
-                    className="w-64 flex-shrink-0 snap-center sm:snap-start rounded-2xl border border-emerald-100/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-lg sm:w-72"
+                    className="w-64 shrink-0 snap-center sm:snap-start rounded-2xl border border-emerald-100/60 bg-white/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-lg sm:w-72"
                   >
                     {/* Image */}
                     <div className="relative h-36 w-full overflow-hidden rounded-xl bg-emerald-50">
@@ -161,7 +161,7 @@ export default function WastePricingSection() {
                     </div>
                     {/* Info */}
                     <h3 className="mt-4 text-base font-semibold text-gray-900">{item.name}</h3>
-                    <p className="mt-1 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
+                    <p className="mt-1 bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-lg font-bold text-transparent">
                       {formatCurrency(item.price_per_kg)}/{item.unit}
                     </p>
                     {item.description && (

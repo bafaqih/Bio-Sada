@@ -304,7 +304,7 @@ export default function TaskDetailPage() {
                 href={getWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:from-green-600 hover:to-green-700 hover:shadow-md"
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-linear-to-r from-green-500 to-green-600 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:from-green-600 hover:to-green-700 hover:shadow-md"
               >
                 <MessageCircle className="h-4 w-4" /> Hubungi Nasabah
               </a>
@@ -465,7 +465,7 @@ export default function TaskDetailPage() {
           </Button>
           <Button
             onClick={() => setShowConfirmComplete(true)}
-            className="h-11 gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700"
+            className="h-11 gap-2 bg-linear-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700"
           >
             <CheckCircle2 className="h-5 w-5" /> Selesaikan Tugas
           </Button>
@@ -535,7 +535,7 @@ export default function TaskDetailPage() {
             <Button
               onClick={handleWeighSubmit}
               disabled={weighItems.isPending}
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+              className="bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
             >
               {weighItems.isPending ? (
                 <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Menyimpan...</>
@@ -591,7 +591,7 @@ export default function TaskDetailPage() {
             <Button
               onClick={handleComplete}
               disabled={completeRequest.isPending}
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+              className="bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
             >
               {completeRequest.isPending ? (
                 <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Memproses...</>
@@ -627,7 +627,7 @@ export default function TaskDetailPage() {
                 setShowSuccessModal(false);
                 navigate('/dashboard/task/history');
               }}
-              className="h-12 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700"
+              className="h-12 w-full bg-linear-to-r from-emerald-500 to-teal-600 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700"
             >
               Tutup
             </Button>

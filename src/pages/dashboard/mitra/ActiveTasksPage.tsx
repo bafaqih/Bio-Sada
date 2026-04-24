@@ -216,7 +216,7 @@ export default function ActiveTasksPage() {
                       <Button
                         size="sm"
                         onClick={() => navigate(`/dashboard/task/${task.id}`)}
-                        className="h-9 flex-[2] gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-95 transition-all rounded-lg"
+                        className="h-9 flex-2 gap-1.5 bg-linear-to-r from-emerald-500 to-teal-600 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-95 transition-all rounded-lg"
                       >
                         <Eye className="h-4 w-4" /> Lihat Detail
                       </Button>
