@@ -1,6 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, ArrowLeft, Recycle, HelpCircle } from 'lucide-react';
+import { Home, ArrowLeft} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/pages/landingpage/sections/Navbar';
 import Footer from '@/pages/landingpage/sections/Footer';
