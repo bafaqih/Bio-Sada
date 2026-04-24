@@ -115,7 +115,7 @@ export default function PartnerManagementPage() {
                 id="verified-switch"
                 checked={showVerified}
                 onCheckedChange={handleToggle}
-                className="data-[state=checked]:bg-emerald-600"
+                className="border-transparent data-checked:border-emerald-600 data-checked:bg-emerald-600 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none"
               />
               <Label htmlFor="verified-switch" className="text-sm font-medium text-gray-700 cursor-pointer">
                 {showVerified ? 'Terverifikasi' : 'Belum Terverifikasi'}

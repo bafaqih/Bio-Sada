@@ -149,7 +149,7 @@ export default function WasteFormModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Plastik PET"
-              className="border-gray-200 focus-visible:ring-emerald-500"
+              className="border-gray-200 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20 focus-visible:ring-offset-0"
               required
             />
           </div>
@@ -167,7 +167,7 @@ export default function WasteFormModal({
               placeholder="e.g. 3000"
               min="0"
               step="100"
-              className="border-gray-200 focus-visible:ring-emerald-500"
+              className="border-gray-200 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20 focus-visible:ring-offset-0"
               required
             />
           </div>
@@ -182,7 +182,7 @@ export default function WasteFormModal({
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
               placeholder="e.g. kg"
-              className="border-gray-200 focus-visible:ring-emerald-500"
+              className="border-gray-200 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20 focus-visible:ring-offset-0"
               required
             />
           </div>
@@ -197,7 +197,7 @@ export default function WasteFormModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Deskripsi singkat jenis sampah..."
-              className="min-h-20 border-gray-200 focus-visible:ring-emerald-500"
+              className="min-h-20 border-gray-200 focus-visible:border-emerald-400 focus-visible:ring-emerald-400/20 focus-visible:ring-offset-0"
               required
             />
           </div>
@@ -258,7 +258,7 @@ export default function WasteFormModal({
             <Switch
               checked={status}
               onCheckedChange={setStatus}
-              className="data-[state=checked]:bg-emerald-600"
+              className="border-transparent data-checked:border-emerald-600 data-checked:bg-emerald-600 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none"
             />
           </div>
 
