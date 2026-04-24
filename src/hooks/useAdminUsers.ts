@@ -175,8 +175,7 @@ export function useApprovePartner() {
       const { error } = await supabase
         .from('profiles')
         .update({ is_verified: true })
-        .eq('id', partnerId)
-        .eq('role', 'partners');
+        .eq('id', partnerId);
 
       if (error) throw error;
     },

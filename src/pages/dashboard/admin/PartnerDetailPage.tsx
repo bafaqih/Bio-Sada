@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -28,6 +29,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 // ── Helpers ─────────────────────────────────────────────────
 
@@ -88,6 +96,10 @@ export default function PartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
+  const [localRejected, setLocalRejected] = useState(false);
+
   const { data: user, isLoading } = useUserDetail(id);
   const { data: stats, isLoading: statsLoading } = useUserDetailStats(id, 'partners');
   const approveMutation = useApprovePartner();
@@ -98,6 +110,7 @@ export default function PartnerDetailPage() {
     try {
       await approveMutation.mutateAsync(id);
       toast.success('Mitra berhasil disetujui! 🎉');
+      setIsAcceptOpen(false);
     } catch {
       toast.error('Gagal menyetujui mitra.');
     }
@@ -107,7 +120,9 @@ export default function PartnerDetailPage() {
     if (!id) return;
     try {
       await rejectMutation.mutateAsync(id);
-      toast.info('Mitra tetap dalam status belum diverifikasi.');
+      setLocalRejected(true);
+      toast.info('Pendaftaran mitra telah ditolak.');
+      setIsRejectOpen(false);
     } catch {
       toast.error('Gagal memproses penolakan.');
     }
@@ -181,29 +196,27 @@ export default function PartnerDetailPage() {
               {/* Approve/Reject Actions */}
               {!user.is_verified && (
                 <div className="flex flex-col gap-2 sm:flex-row shrink-0">
-                  <Button
-                    onClick={handleApprove}
-                    disabled={approveMutation.isPending}
-                    className="gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
-                  >
-                    {approveMutation.isPending ? (
-                      <><Loader2 className="h-4 w-4 animate-spin" /> Memproses...</>
-                    ) : (
-                      <><CheckCircle2 className="h-4 w-4" /> Terima</>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleReject}
-                    disabled={rejectMutation.isPending}
-                    className="gap-1.5 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-                  >
-                    {rejectMutation.isPending ? (
-                      <><Loader2 className="h-4 w-4 animate-spin" /> Memproses...</>
-                    ) : (
-                      <><XCircle className="h-4 w-4" /> Tolak</>
-                    )}
-                  </Button>
+                  {localRejected ? (
+                    <Badge variant="outline" className="border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600">
+                      <ShieldX className="mr-1.5 h-4 w-4" /> DITOLAK
+                    </Badge>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => setIsAcceptOpen(true)}
+                        className="gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+                      >
+                        <CheckCircle2 className="h-4 w-4" /> Terima
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsRejectOpen(true)}
+                        className="gap-1.5 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      >
+                        <XCircle className="h-4 w-4" /> Tolak
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -282,6 +295,16 @@ export default function PartnerDetailPage() {
                     <p className="text-xs text-gray-500">Akun ini telah terverifikasi sebagai Mitra resmi dan dapat diandalkan oleh nasabah mulai dari tanggal <strong>{formatDate(user.created_at)}</strong>.</p>
                   </div>
                 </>
+              ) : localRejected ? (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
+                    <ShieldX className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-red-700">Pendaftaran Ditolak</p>
+                    <p className="text-xs text-gray-400">Pendaftaran mitra ini telah ditolak oleh admin. Mitra tidak dapat melakukan aktivitas penjemputan.</p>
+                  </div>
+                </>
               ) : (
                 <>
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
@@ -336,6 +359,61 @@ export default function PartnerDetailPage() {
           </Card>
         </div>
       </motion.div>
+
+      {/* Confirmation Dialogs */}
+      <Dialog open={isAcceptOpen} onOpenChange={setIsAcceptOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-gray-900">Terima Pendaftaran Mitra</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-500">
+            Apakah Anda yakin ingin menyetujui pendaftaran mitra <span className="font-semibold text-gray-800">{user.full_name}</span>? Mitra akan dapat mulai menerima tugas penjemputan sampah.
+          </p>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={() => setIsAcceptOpen(false)} className="text-gray-500">
+              Batal
+            </Button>
+            <Button
+              onClick={handleApprove}
+              disabled={approveMutation.isPending}
+              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-sm hover:from-emerald-600 hover:to-teal-700"
+            >
+              {approveMutation.isPending ? (
+                <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Memproses...</>
+              ) : (
+                'Ya, Terima'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-gray-900">Tolak Pendaftaran Mitra</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-500">
+            Apakah Anda yakin ingin menolak pendaftaran mitra <span className="font-semibold text-gray-800">{user.full_name}</span>? Status mitra akan tetap tidak terverifikasi.
+          </p>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={() => setIsRejectOpen(false)} className="text-gray-500">
+              Batal
+            </Button>
+            <Button
+              onClick={handleReject}
+              disabled={rejectMutation.isPending}
+              className="bg-red-600 text-white hover:bg-red-700"
+            >
+              {rejectMutation.isPending ? (
+                <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Memproses...</>
+              ) : (
+                'Ya, Tolak'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
