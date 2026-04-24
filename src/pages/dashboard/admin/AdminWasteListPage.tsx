@@ -160,7 +160,7 @@ export default function AdminWasteListPage() {
               <TableHead className="w-16 text-center">Foto</TableHead>
               <TableHead>Nama Jenis</TableHead>
               <TableHead className="text-right">Harga (Rp/Kg)</TableHead>
-              <TableHead className="hidden md:table-cell">Deskripsi</TableHead>
+              <TableHead className="min-w-[120px]">Deskripsi</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-center">Aksi</TableHead>
             </TableRow>
@@ -173,7 +173,7 @@ export default function AdminWasteListPage() {
                   <TableCell className="text-center"><Skeleton className="mx-auto h-10 w-10 rounded-full" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-20" /></TableCell>
-                  <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-48" /></TableCell>
+                  <TableCell className="min-w-[120px]"><Skeleton className="h-4 w-full" /></TableCell>
                   <TableCell className="text-center"><Skeleton className="mx-auto h-6 w-16 rounded-full" /></TableCell>
                   <TableCell className="text-center"><Skeleton className="mx-auto h-8 w-24" /></TableCell>
                 </TableRow>
@@ -202,7 +202,7 @@ export default function AdminWasteListPage() {
                   <TableCell className="text-right font-semibold text-emerald-700">
                     {formatCurrency(item.price_per_kg)}/{item.unit}
                   </TableCell>
-                  <TableCell className="hidden max-w-xs whitespace-normal break-words text-sm text-gray-500 md:table-cell">
+                  <TableCell className="max-w-[150px] whitespace-normal break-words text-sm text-gray-500 md:max-w-xs">
                     {item.description ?? '-'}
                   </TableCell>
                   <TableCell className="text-center">
