@@ -43,7 +43,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   // Role check: if allowedRoles is provided, verify user has permission
-  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(profile.role)) {
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(profile?.role as UserRole)) {
     toast.error('Anda tidak memiliki akses ke halaman ini.');
     return <Navigate to="/dashboard" replace />;
   }

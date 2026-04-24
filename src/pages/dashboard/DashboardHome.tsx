@@ -196,7 +196,7 @@ type SortMode = 'newest' | 'nearest';
 function PartnerDashboard() {
   const { profile } = useAuthStore();
   const navigate = useNavigate();
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = usePartnerStats(profile?.id);
+  const { data: stats, isLoading: statsLoading } = usePartnerStats(profile?.id);
   const { data: pendingRequests, isLoading: requestsLoading, refetch: refetchRequests } = usePendingRequests();
   const acceptRequest = useAcceptRequest();
   const { data: partnerAddresses } = useAddresses(profile?.id);
