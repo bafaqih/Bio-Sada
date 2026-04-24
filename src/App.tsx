@@ -37,6 +37,7 @@ import CustomerManagementPage from '@/pages/dashboard/admin/CustomerManagementPa
 import CustomerDetailPage from '@/pages/dashboard/admin/CustomerDetailPage';
 import TransactionLogsPage from '@/pages/dashboard/admin/TransactionLogsPage';
 import TransactionDetailPage from '@/pages/dashboard/admin/TransactionDetailPage';
+import NotFoundPage from '@/pages/error/NotFoundPage';
 
 // ── Query Client ─────────────────────────────────────────────
 
@@ -52,21 +53,6 @@ const queryClient = new QueryClient({
 
 
 
-// ── 404 page ────────────────────────────────────────────────
-
-function NotFoundPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-10 text-center">
-      <div>
-        <h1 className="text-6xl font-bold text-gray-300">404</h1>
-        <p className="mt-2 text-lg text-gray-500">Halaman tidak ditemukan!</p>
-        <a href="/" className="mt-4 inline-block text-emerald-600 underline hover:text-emerald-700">
-          Kembali ke Beranda
-        </a>
-      </div>
-    </div>
-  );
-}
 
 // ── Role-aware waste list wrapper ────────────────────────────
 
