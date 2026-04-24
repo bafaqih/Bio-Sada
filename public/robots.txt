@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Exclude private dashboard areas
+Disallow: /dashboard/
+
+# Host and Sitemap
+Host: https://bio-sada.com
+Sitemap: https://bio-sada.com/sitemap.xml
