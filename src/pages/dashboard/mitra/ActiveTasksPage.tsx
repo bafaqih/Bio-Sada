@@ -95,7 +95,7 @@ export default function ActiveTasksPage() {
           ))}
         </div>
       ) : !tasks || tasks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 mb-4">
             <Package className="h-10 w-10 text-emerald-200" />
           </div>
@@ -103,12 +103,6 @@ export default function ActiveTasksPage() {
           <p className="mt-1 text-sm text-gray-500 max-w-xs">
             Daftar tugas yang Anda ambil akan muncul di sini. Silakan cari tugas baru di dashboard.
           </p>
-          <Button 
-            onClick={() => navigate('/dashboard')}
-            className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white"
-          >
-            Kembali ke Dashboard
-          </Button>
         </div>
       ) : (
         <motion.div
