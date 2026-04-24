@@ -1,5 +1,5 @@
 // DashboardLayout.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
@@ -61,6 +61,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -150,6 +151,20 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
+// ── Helper: Close sidebar on mobile route change ──────────
+function SidebarMobileCloser() {
+  const { pathname } = useLocation();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }, [pathname, isMobile, setOpenMobile]);
+
+  return null;
+}
+
 // ── Main Layout Component ───────────────────────────────────
 
 export default function DashboardLayout() {
@@ -161,16 +176,16 @@ export default function DashboardLayout() {
 
   const navItems = NAV_ITEMS[profile?.role ?? 'customers'];
   const roleLabel = ROLE_LABELS[profile?.role ?? 'customers'];
-  
+
   const { data: addresses, isLoading: addressesLoading } = useAddresses(profile?.id);
-  
+
   const isCustomer = profile?.role === 'customers';
   const isPartner = profile?.role === 'partners';
-  
+
   const hasAddress = !addressesLoading && addresses && addresses.length > 0;
   const noAddressYet = !addressesLoading && addresses !== undefined && addresses.length === 0;
   const needsAddress = (isCustomer || isPartner) && noAddressYet && !hidePrompt;
-  
+
   // Hanya tampilkan modal Menunggu Persetujuan jika mitra SUDAH benar-benar punya alamat
   const needsApproval = isPartner && !profile?.is_verified && hasAddress;
 
@@ -236,6 +251,7 @@ export default function DashboardLayout() {
         <title>Dashboard | Bio-Sada</title>
       </Helmet>
       <SidebarProvider>
+        <SidebarMobileCloser />
         {/* ── Sidebar ──────────────────────────────────── */}
         <Sidebar collapsible="icon" className="border-r-emerald-100">
           {/* Logo */}
@@ -429,7 +445,7 @@ export default function DashboardLayout() {
 
       {/* Global No-Address Warning for Customers & Partners */}
       {needsAddress && (
-        <Dialog open={true} onOpenChange={() => {}}>
+        <Dialog open={true} onOpenChange={() => { }}>
           <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
             <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-4">
@@ -462,7 +478,7 @@ export default function DashboardLayout() {
 
       {/* Partner Approval Gate — blocks all features until admin approves */}
       {needsApproval && (
-        <Dialog open={true} onOpenChange={() => {}}>
+        <Dialog open={true} onOpenChange={() => { }}>
           <DialogContent className="sm:max-w-lg p-6 sm:px-8 sm:py-7 [&>button]:hidden text-center z-[100]" onInteractOutside={(e) => e.preventDefault()}>
             <DialogHeader className="flex flex-col items-center sm:text-center mt-0">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mb-4 animate-pulse">
