@@ -85,7 +85,7 @@ export default function Footer() {
 
           {/* Quick links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">Tautan Cepat</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">Navigasi</h3>
             <ul className="mt-4 space-y-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.href}>
@@ -123,9 +123,9 @@ export default function Footer() {
               <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">Kontak Kami</h3>
               <ul className="mt-4 space-y-2.5">
                 <li>
-                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-emerald-600">
+                  <a href="https://wa.me/6282118312630" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-emerald-600">
                     <Phone className="h-3.5 w-3.5" />
-                    <span>0812-3456-7890</span>
+                    <span>+62 821-1831-2630</span>
                   </a>
                 </li>
                 <li>

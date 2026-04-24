@@ -3,7 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { MapPin, Phone, Mail, MessageSquare } from 'lucide-react';
 
 const CONTACT_INFO = [
-  { icon: Phone, label: 'WhatsApp', value: '+62 812-3456-7890', href: 'https://wa.me/6281234567890' },
+  { icon: Phone, label: 'WhatsApp', value: '+62 821-1831-2630', href: 'https://wa.me/6282118312630' },
   { icon: Mail, label: 'Email', value: 'biosadacom@gmail.com', href: 'mailto:biosadacom@gmail.com' },
   { icon: MapPin, label: 'Alamat', value: 'Universitas Negeri Malang, Jl. Cakrawala No.5, Sumbersari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145', href: null },
 ];
