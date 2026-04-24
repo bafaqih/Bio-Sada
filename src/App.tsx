@@ -78,7 +78,7 @@ function WasteListRouteWrapper() {
 // ── Main App ────────────────────────────────────────────────
 
 function AppRoutes() {
-  const { isInitialized, initializeAuth } = useAuthStore();
+  const { initializeAuth } = useAuthStore();
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
