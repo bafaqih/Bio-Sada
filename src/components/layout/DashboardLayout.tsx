@@ -10,7 +10,6 @@ import {
   UserCheck,
   BadgeDollarSign,
   LogOut,
-  Recycle,
   ChevronsUpDown,
   User,
   ChevronRight,
@@ -449,7 +448,7 @@ function DashboardLayoutContent() {
           {/* Header */}
           <header className="flex h-14 shrink-0 items-center gap-2 border-b border-gray-100 bg-white/80 px-4 backdrop-blur-sm transition-[width,height] ease-linear">
             <SidebarTrigger className="-ml-1 text-gray-500 hover:text-emerald-600" />
-            <Separator orientation="vertical" className="mr-2 h-4 bg-gray-200" />
+
             <div className="flex flex-1 items-center justify-between">
               <h2 className="text-sm font-medium text-gray-500">
                 {getPageTitle()}
