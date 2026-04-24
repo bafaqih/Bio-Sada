@@ -34,8 +34,11 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  // 3. Session exists but profile is still loading
-  if (isFetchingProfile || !profile) {
+  // 3. Session exists but profile is missing (either first load or error)
+  // We ONLY show LoadingScreen if we don't have a profile yet.
+  // If isFetchingProfile is true but we ALREADY have a profile, 
+  // we don't show the loading screen to avoid unmounting the dashboard.
+  if (!profile && (isFetchingProfile || isInitialized)) {
     return <LoadingScreen />;
   }
 
