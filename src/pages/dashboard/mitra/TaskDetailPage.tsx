@@ -283,17 +283,19 @@ export default function TaskDetailPage() {
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                <span className="flex items-center gap-1">
-                  <Calendar className="h-3.5 w-3.5" /> {formatDate(task.pickup_date)}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" /> {task.pickup_time}
-                </span>
-                <Badge variant="secondary" className={statusConfig.className}>
-                  {statusConfig.label}
-                </Badge>
+              <div className="flex flex-col gap-1.5 text-sm">
+                <span className="text-gray-500">Tanggal & Waktu Jemput</span>
+                <div className="flex flex-wrap items-center gap-4 font-medium text-gray-800">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5 text-emerald-500" /> {formatDate(task.pickup_date)}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5 text-emerald-500" /> {task.pickup_time}
+                  </span>
+                </div>
               </div>
+
+
             </div>
 
             {/* WhatsApp button */}
@@ -354,6 +356,10 @@ export default function TaskDetailPage() {
 
             <div className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
+                <span className="text-gray-500">Dibuat pada</span>
+                <span className="font-medium text-gray-800">{formatDateTime(task.created_at || null)}</span>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-gray-500">Diterima pada</span>
                 <span className="font-medium text-gray-800">{formatDateTime(task.accepted_at)}</span>
               </div>
@@ -363,13 +369,20 @@ export default function TaskDetailPage() {
                   <span className="font-medium text-emerald-700">{formatDateTime(task.completed_at)}</span>
                 </div>
               )}
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-gray-500">Status Tugas</span>
+                <Badge variant="secondary" className={statusConfig.className}>
+                  {statusConfig.label}
+                </Badge>
+              </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-500">Mitra</span>
+                <span className="text-gray-500">Mitra Pengepul</span>
                 <span className="flex items-center gap-1 font-medium text-gray-800">
                   <BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> {profile?.full_name ?? '-'}
                 </span>
               </div>
             </div>
+
           </CardContent>
         </Card>
       </div>
