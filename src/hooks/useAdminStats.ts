@@ -69,7 +69,7 @@ export function useUnverifiedPartnersPreview(limit = 5) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, username, phone_number, avatar_url, role, is_verified, created_at')
+        .select('id, full_name, username, email, phone_number, avatar_url, role, is_verified, created_at')
         .eq('role', 'partners')
         .eq('is_verified', false)
         .order('created_at', { ascending: false })

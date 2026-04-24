@@ -214,7 +214,7 @@ export default function AdminOverviewPage() {
                 <TableRow className="hover:bg-transparent">
                   <TableHead className="w-12 text-center">No</TableHead>
                   <TableHead>Nama</TableHead>
-                  <TableHead className="hidden md:table-cell">Username</TableHead>
+                  <TableHead className="hidden md:table-cell">Email</TableHead>
                   <TableHead className="hidden sm:table-cell">No. HP</TableHead>
                   <TableHead>Tanggal Daftar</TableHead>
                   <TableHead className="text-center">Aksi</TableHead>
@@ -226,7 +226,7 @@ export default function AdminOverviewPage() {
                     <TableCell className="text-center text-sm text-gray-500">{index + 1}</TableCell>
                     <TableCell className="font-medium text-gray-800">{partner.full_name}</TableCell>
                     <TableCell className="hidden text-sm text-gray-500 md:table-cell">
-                      {partner.username ?? '-'}
+                      {partner.email ?? '-'}
                     </TableCell>
                     <TableCell className="hidden text-sm text-gray-500 sm:table-cell">
                       {partner.phone_number ?? '-'}

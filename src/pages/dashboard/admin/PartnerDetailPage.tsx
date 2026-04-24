@@ -170,6 +170,47 @@ export default function PartnerDetailPage() {
         </h1>
       </div>
 
+      {/* Verification Info - Moved to Top */}
+      <motion.div variants={itemVariants}>
+        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              {user.is_verified ? (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+                    <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-emerald-700">Akun Terverifikasi</p>
+                    <p className="text-xs text-gray-500">Akun ini telah terverifikasi sebagai Mitra resmi dan dapat diandalkan oleh nasabah mulai dari tanggal <strong>{formatDate(user.created_at)}</strong>.</p>
+                  </div>
+                </>
+              ) : localRejected ? (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
+                    <ShieldX className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-red-700">Pendaftaran Ditolak</p>
+                    <p className="text-xs text-gray-400">Pendaftaran mitra ini telah ditolak oleh admin. Mitra tidak dapat melakukan aktivitas penjemputan.</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                    <ShieldX className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-700">Menunggu Verifikasi</p>
+                    <p className="text-xs text-gray-400">Akun mitra ini belum disetujui. Gunakan tombol Terima atau Tolak pada bagian profil atas.</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
       <motion.div variants={itemVariants}>
         <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
           <CardContent className="p-6">
@@ -280,46 +321,6 @@ export default function PartnerDetailPage() {
         </Card>
       </motion.div>
 
-      {/* Verification Info */}
-      <motion.div variants={itemVariants}>
-        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              {user.is_verified ? (
-                <>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
-                    <ShieldCheck className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-emerald-700">Akun Terverifikasi</p>
-                    <p className="text-xs text-gray-500">Akun ini telah terverifikasi sebagai Mitra resmi dan dapat diandalkan oleh nasabah mulai dari tanggal <strong>{formatDate(user.created_at)}</strong>.</p>
-                  </div>
-                </>
-              ) : localRejected ? (
-                <>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
-                    <ShieldX className="h-5 w-5 text-red-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-red-700">Pendaftaran Ditolak</p>
-                    <p className="text-xs text-gray-400">Pendaftaran mitra ini telah ditolak oleh admin. Mitra tidak dapat melakukan aktivitas penjemputan.</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-                    <ShieldX className="h-5 w-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-amber-700">Menunggu Verifikasi</p>
-                    <p className="text-xs text-gray-400">Akun mitra ini belum disetujui. Gunakan tombol Terima atau Tolak pada bagian profil atas.</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
 
       {/* Stats Cards */}
       <motion.div variants={itemVariants}>
