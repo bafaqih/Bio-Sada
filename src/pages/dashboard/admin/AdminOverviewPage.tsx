@@ -7,6 +7,7 @@ import {
   UserCheck,
   Package,
   ArrowRight,
+  RefreshCw,
 } from 'lucide-react';
 
 import { useAdminStats, useUnverifiedPartnersPreview, usePendingRequestsPreview } from '@/hooks/useAdminStats';
@@ -63,9 +64,9 @@ const itemVariants = {
  */
 export default function AdminOverviewPage() {
   const navigate = useNavigate();
-  const { data: stats, isLoading: statsLoading } = useAdminStats();
-  const { data: unverifiedPartners, isLoading: partnersLoading } = useUnverifiedPartnersPreview(5);
-  const { data: pendingRequests, isLoading: requestsLoading } = usePendingRequestsPreview(5);
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useAdminStats();
+  const { data: unverifiedPartners, isLoading: partnersLoading, refetch: refetchPartners } = useUnverifiedPartnersPreview(5);
+  const { data: pendingRequests, isLoading: requestsLoading, refetch: refetchRequests } = usePendingRequestsPreview(5);
 
   return (
     <motion.div
@@ -167,15 +168,27 @@ export default function AdminOverviewPage() {
                   {unverifiedPartners?.length}
                 </Badge>
               )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => refetchPartners()}
+                disabled={partnersLoading}
+                className="h-7 w-7 text-gray-400 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-100 disabled:text-emerald-600 disabled:bg-emerald-50"
+                title="Refresh data"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${partnersLoading ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate('/dashboard/management/partner')}
-              className="h-8 gap-1 text-xs text-emerald-600 hover:text-emerald-700"
-            >
-              Lihat Semua <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/dashboard/management/partner')}
+                className="h-8 gap-1 text-xs text-emerald-600 hover:text-emerald-700"
+              >
+                Lihat Semua <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
 
           {partnersLoading ? (
@@ -247,15 +260,27 @@ export default function AdminOverviewPage() {
                   {pendingRequests?.length}
                 </Badge>
               )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => refetchRequests()}
+                disabled={requestsLoading}
+                className="h-7 w-7 text-gray-400 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-100 disabled:text-emerald-600 disabled:bg-emerald-50"
+                title="Refresh data"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${requestsLoading ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate('/dashboard/transaction')}
-              className="h-8 gap-1 text-xs text-emerald-600 hover:text-emerald-700"
-            >
-              Lihat Semua <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/dashboard/transaction')}
+                className="h-8 gap-1 text-xs text-emerald-600 hover:text-emerald-700"
+              >
+                Lihat Semua <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
 
           {requestsLoading ? (

@@ -12,6 +12,7 @@ import {
   ArrowDownUp,
   MapPin,
   Loader2,
+  RefreshCw,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
@@ -195,8 +196,8 @@ type SortMode = 'newest' | 'nearest';
 function PartnerDashboard() {
   const { profile } = useAuthStore();
   const navigate = useNavigate();
-  const { data: stats, isLoading: statsLoading } = usePartnerStats(profile?.id);
-  const { data: pendingRequests, isLoading: requestsLoading } = usePendingRequests();
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = usePartnerStats(profile?.id);
+  const { data: pendingRequests, isLoading: requestsLoading, refetch: refetchRequests } = usePendingRequests();
   const acceptRequest = useAcceptRequest();
   const { data: partnerAddresses } = useAddresses(profile?.id);
 
@@ -334,16 +335,28 @@ function PartnerDashboard() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => refetchRequests()}
+                disabled={requestsLoading}
+                className="h-7 w-7 text-gray-400 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-100 disabled:text-emerald-600 disabled:bg-emerald-50"
+                title="Refresh data"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${requestsLoading ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSortMode(sortMode === 'newest' ? 'nearest' : 'newest')}
-              className="h-8 gap-1 border-gray-200 text-xs text-gray-600 hover:border-emerald-300 hover:text-emerald-700"
-            >
-              <ArrowDownUp className="h-3.5 w-3.5" />
-              {sortMode === 'newest' ? 'Terbaru' : 'Terdekat'}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSortMode(sortMode === 'newest' ? 'nearest' : 'newest')}
+                className="h-8 gap-1 border-gray-200 text-xs text-gray-600 hover:border-emerald-300 hover:text-emerald-700"
+              >
+                <ArrowDownUp className="h-3.5 w-3.5" />
+                {sortMode === 'newest' ? 'Terbaru' : 'Terdekat'}
+              </Button>
+            </div>
           </div>
 
           {/* Table / Empty State */}
