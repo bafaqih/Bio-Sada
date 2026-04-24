@@ -69,6 +69,30 @@ const formatNumber = (num: number) =>
 const formatCurrency = (num: number) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
 
+const formatDate = (date: string) => {
+  try {
+    return new Date(date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+  } catch {
+    return date;
+  }
+};
+
+const formatRelativeTime = (dateStr: string | undefined) => {
+  if (!dateStr) return '-';
+  try {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Baru saja';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} menit lalu`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} jam lalu`;
+    return formatDate(dateStr);
+  } catch {
+    return dateStr;
+  }
+};
+
 // ── Animation variants ──────────────────────────────────────
 
 const containerVariants = {
@@ -341,9 +365,11 @@ function PartnerDashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
+                  <TableHead>Waktu Request</TableHead>
                   <TableHead>Nasabah</TableHead>
-                  <TableHead>Kategori Sampah</TableHead>
+                  <TableHead>Kategori</TableHead>
                   <TableHead className="text-right">Est. Berat</TableHead>
+                  <TableHead>Jadwal Jemput</TableHead>
                   <TableHead>
                     <div className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5" /> Jarak & Alamat
@@ -352,6 +378,7 @@ function PartnerDashboard() {
                   <TableHead className="text-center">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {sortedRequests.map((req) => {
                   // Since pickup_request_items might not be readable for pending requests due to RLS,
@@ -366,6 +393,16 @@ function PartnerDashboard() {
 
                   return (
                     <TableRow key={req.id} className="transition-colors hover:bg-emerald-50/30">
+                      <TableCell>
+                        <div className="text-[11px] leading-tight text-gray-500">
+                          <span className="font-medium text-gray-700">
+                            {new Date(req.created_at || '').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })}, {new Date(req.created_at || '').toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          <p className="mt-0.5 font-medium text-emerald-600 italic">
+                            ({formatRelativeTime(req.created_at)})
+                          </p>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-medium text-gray-800">
                         {req.customer?.full_name ?? 'Nasabah'}
                       </TableCell>
@@ -382,6 +419,13 @@ function PartnerDashboard() {
                       <TableCell className="text-right text-sm font-medium text-gray-800">
                         {totalEstWeight > 0 ? `${totalEstWeight} kg` : '-'}
                       </TableCell>
+                      <TableCell>
+                        <div className="text-xs font-medium text-gray-700">
+                          {formatDate(req.pickup_date)}
+                          <p className="text-[10px] text-gray-400">{req.pickup_time}</p>
+                        </div>
+                      </TableCell>
+
                       <TableCell>
                         <div className="text-sm">
                           {req.distance !== null ? (
