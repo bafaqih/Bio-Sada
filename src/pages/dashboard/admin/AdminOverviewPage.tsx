@@ -65,7 +65,7 @@ const itemVariants = {
  */
 export default function AdminOverviewPage() {
   const navigate = useNavigate();
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useAdminStats();
+  const { data: stats, isLoading: statsLoading } = useAdminStats();
   const { data: unverifiedPartners, isLoading: partnersLoading, refetch: refetchPartners } = useUnverifiedPartnersPreview(5);
   const { data: pendingRequests, isLoading: requestsLoading, refetch: refetchRequests } = usePendingRequestsPreview(5);
 
