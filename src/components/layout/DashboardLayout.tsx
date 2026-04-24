@@ -22,6 +22,8 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
+import BioSadaLogo from '@/assets/images/logo/Bio-Sada.svg';
+
 import { useAuthStore } from '@/stores/authStore';
 import { useAddresses } from '@/hooks/useAddresses';
 import type { UserRole } from '@/lib/types';
@@ -168,7 +170,21 @@ function SidebarMobileCloser() {
 // ── Main Layout Component ───────────────────────────────────
 
 export default function DashboardLayout() {
+  return (
+    <TooltipProvider>
+      <Helmet>
+        <title>Dashboard | Bio-Sada</title>
+      </Helmet>
+      <SidebarProvider>
+        <DashboardLayoutContent />
+      </SidebarProvider>
+    </TooltipProvider>
+  );
+}
+
+function DashboardLayoutContent() {
   const { profile, logout, fetchProfile } = useAuthStore();
+  const { state, setOpen } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
   const [hidePrompt, setHidePrompt] = useState(false);
@@ -246,24 +262,24 @@ export default function DashboardLayout() {
   };
 
   return (
-    <TooltipProvider>
-      <Helmet>
-        <title>Dashboard | Bio-Sada</title>
-      </Helmet>
-      <SidebarProvider>
-        <SidebarMobileCloser />
+    <>
+      <SidebarMobileCloser />
         {/* ── Sidebar ──────────────────────────────────── */}
         <Sidebar collapsible="icon" className="border-r-emerald-100">
           {/* Logo */}
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="lg" asChild>
+                <SidebarMenuButton size="lg" asChild className="group-data-[collapsible=icon]:!p-0">
                   <Link to="/dashboard" id="sidebar-logo">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shadow-emerald-500/20">
-                      <Recycle className="h-4.5 w-4.5 text-white" />
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center">
+                      <img 
+                        src={BioSadaLogo} 
+                        alt="Bio-Sada Logo" 
+                        className="h-9 w-9 object-contain" 
+                      />
                     </div>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
+                    <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                       <span className="truncate font-bold text-gray-900">Bio-Sada</span>
                       <span className="truncate text-xs text-gray-400">Bank Sampah Digital</span>
                     </div>
@@ -294,6 +310,11 @@ export default function DashboardLayout() {
                             <CollapsibleTrigger asChild>
                               <SidebarMenuButton
                                 tooltip={item.label}
+                                onClick={() => {
+                                  if (state === 'collapsed') {
+                                    setOpen(true);
+                                  }
+                                }}
                                 className={
                                   active
                                     ? 'bg-emerald-50 font-semibold text-emerald-700 hover:bg-emerald-50! hover:text-emerald-700!'
@@ -301,8 +322,8 @@ export default function DashboardLayout() {
                                 }
                               >
                                 <item.icon className="h-4 w-4" />
-                                <span>{item.label}</span>
-                                <ChevronRight className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                                <ChevronRight className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90 group-data-[collapsible=icon]:hidden" />
                               </SidebarMenuButton>
                             </CollapsibleTrigger>
                             <CollapsibleContent>
@@ -345,7 +366,7 @@ export default function DashboardLayout() {
                         >
                           <Link to={item.href!}>
                             <item.icon className="h-4 w-4" />
-                            <span>{item.label}</span>
+                            <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -373,13 +394,13 @@ export default function DashboardLayout() {
                           {getInitials(profile?.full_name ?? 'U')}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
+                      <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                         <span className="truncate font-semibold text-gray-800">
                           {profile?.full_name ?? 'Pengguna'}
                         </span>
                         <span className="truncate text-xs text-gray-400">{roleLabel}</span>
                       </div>
-                      <ChevronsUpDown className="ml-auto h-4 w-4 text-gray-400" />
+                      <ChevronsUpDown className="ml-auto h-4 w-4 text-gray-400 group-data-[collapsible=icon]:hidden" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -441,7 +462,7 @@ export default function DashboardLayout() {
             <Outlet />
           </div>
         </SidebarInset>
-      </SidebarProvider>
+
 
       {/* Global No-Address Warning for Customers & Partners */}
       {needsAddress && (
@@ -509,6 +530,6 @@ export default function DashboardLayout() {
         </Dialog>
       )}
 
-    </TooltipProvider>
+    </>
   );
 }
