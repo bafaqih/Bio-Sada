@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import incomingRequestSound from '@/assets/sounds/IncomingRequest.mp3';
 
@@ -42,6 +43,10 @@ export function useRealtimeOrders(enabled: boolean) {
             payload.eventType === 'INSERT' &&
             (payload.new as { status?: string })?.status === 'pending'
           ) {
+            toast.info('Ada order penjemputan baru!', {
+              description: 'Segera cek tabel order masuk.',
+              duration: 5000,
+            });
             playNotificationSound();
           }
         },

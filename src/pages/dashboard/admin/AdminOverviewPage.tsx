@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import { useAdminStats, useUnverifiedPartnersPreview, usePendingRequestsPreview } from '@/hooks/useAdminStats';
+import { useRealtimeAdmin } from '@/hooks/useRealtimeAdmin';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -64,9 +65,12 @@ const itemVariants = {
  */
 export default function AdminOverviewPage() {
   const navigate = useNavigate();
-  const { data: stats, isLoading: statsLoading } = useAdminStats();
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useAdminStats();
   const { data: unverifiedPartners, isLoading: partnersLoading, refetch: refetchPartners } = useUnverifiedPartnersPreview(5);
   const { data: pendingRequests, isLoading: requestsLoading, refetch: refetchRequests } = usePendingRequestsPreview(5);
+
+  // Enable realtime notifications for admin
+  useRealtimeAdmin(true);
 
   return (
     <motion.div
