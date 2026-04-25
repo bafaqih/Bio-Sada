@@ -24,6 +24,12 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 // ── Empty item factory ───────────────────────────────────────
 
@@ -59,6 +65,7 @@ export default function DepositRequestPage() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -364,7 +371,8 @@ export default function DepositRequestPage() {
                   <img
                     src={photoPreview}
                     alt="Preview sampah"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover cursor-pointer transition-transform hover:scale-105"
+                    onClick={() => setShowImageModal(true)}
                   />
                   <button
                     type="button"
@@ -441,6 +449,22 @@ export default function DepositRequestPage() {
           </CardContent>
         </Card>
       </form>
+
+      {/* ── Image Dialog ────────────────────────────────────── */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-3xl p-1 bg-transparent border-none shadow-none [&>button]:right-4 [&>button]:top-4 [&>button]:bg-white/50 [&>button]:rounded-full [&>button]:text-gray-900 hover:[&>button]:bg-white">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Preview Foto Sampah</DialogTitle>
+          </DialogHeader>
+          {photoPreview && (
+            <img 
+              src={photoPreview} 
+              alt="Preview Foto Sampah Diperbesar"
+              className="w-full h-auto max-h-[85vh] object-contain rounded-xl"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
