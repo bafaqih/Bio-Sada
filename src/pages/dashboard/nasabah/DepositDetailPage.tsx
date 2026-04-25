@@ -17,7 +17,6 @@ import {
   Hourglass,
 } from 'lucide-react';
 
-import { useAuthStore } from '@/stores/authStore';
 import { useDepositDetail, useCancelPickupRequest } from '@/hooks/usePickupRequests';
 import type { RequestStatus } from '@/lib/types';
 

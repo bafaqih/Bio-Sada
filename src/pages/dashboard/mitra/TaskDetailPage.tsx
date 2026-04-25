@@ -85,7 +85,7 @@ const formatDate = (date: string | null) => {
   }
 };
 
-const formatDateTime = (dt: string | null) => {
+const formatDateTime = (dt: string | null | undefined) => {
   if (!dt) return '-';
   try {
     return new Date(dt).toLocaleString('id-ID', {
