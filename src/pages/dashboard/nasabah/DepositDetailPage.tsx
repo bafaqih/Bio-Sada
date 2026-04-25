@@ -14,6 +14,7 @@ import {
   ImageIcon,
   StickyNote,
   BadgeCheck,
+  Hourglass,
 } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
@@ -240,9 +241,24 @@ export default function DepositDetailPage() {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center py-4 w-full text-center">
-                <div className="bg-amber-50 text-amber-700 px-4 py-3 rounded-lg border border-amber-100 text-sm">
-                  Menunggu mitra mengambil request Anda.
+              <div className="flex flex-col items-center justify-center py-6 w-full text-center space-y-3">
+                <motion.div
+                  animate={{ 
+                    rotate: [0, -10, 10, -10, 10, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="bg-amber-100 p-3 rounded-full"
+                >
+                  <Hourglass className="h-8 w-8 text-amber-600" />
+                </motion.div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-amber-800">Masih mencari mitra terdekat...</p>
+                  <p className="text-xs text-amber-600">Belum ada mitra yang mengambil request Anda nih.</p>
                 </div>
               </div>
             )}
@@ -298,7 +314,13 @@ export default function DepositDetailPage() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-500">Diterima pada</span>
-                <span className="font-medium text-gray-800">{formatDateTime(task.accepted_at)}</span>
+                <span className="font-medium text-gray-800">
+                  {task.accepted_at ? formatDateTime(task.accepted_at) : (
+                    <span className="flex items-center gap-1 font-normal text-gray-500">
+                      <Hourglass className="h-3 w-3 animate-pulse text-amber-500" /> Menunggu...
+                    </span>
+                  )}
+                </span>
               </div>
               {isHistory && (
                 <div className="flex items-center justify-between">
@@ -315,7 +337,13 @@ export default function DepositDetailPage() {
               <div className="flex items-center justify-between">
                 <span className="text-gray-500">Mitra Pengepul</span>
                 <span className="flex items-center gap-1 font-medium text-gray-800">
-                  <BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> {task.partner?.full_name ?? 'Menunggu...'}
+                  {task.partner ? (
+                    <><BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> {task.partner.full_name}</>
+                  ) : (
+                    <span className="flex items-center gap-1 font-normal text-gray-500">
+                      <Hourglass className="h-3.5 w-3.5 text-amber-500 animate-pulse" /> Menunggu...
+                    </span>
+                  )}
                 </span>
               </div>
             </div>
