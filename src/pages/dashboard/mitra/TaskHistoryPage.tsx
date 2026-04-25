@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, History } from 'lucide-react';
+import { ChevronLeft, ChevronRight, History, Eye } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
 import { usePartnerTaskHistory } from '@/hooks/usePartnerRequests';
@@ -48,6 +49,7 @@ const PAGE_SIZE_OPTIONS: { value: string; label: string }[] = [
  * Paginated table of completed/cancelled tasks.
  */
 export default function TaskHistoryPage() {
+  const navigate = useNavigate();
   const { profile } = useAuthStore();
   const [pageSize, setPageSize] = useState<PageSizeOption>(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -136,6 +138,7 @@ export default function TaskHistoryPage() {
               <TableHead className="text-right">Total Harga</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="hidden md:table-cell">Selesai</TableHead>
+              <TableHead className="w-20 text-center">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -149,11 +152,12 @@ export default function TaskHistoryPage() {
                   <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-24" /></TableCell>
                   <TableCell className="text-center"><Skeleton className="mx-auto h-6 w-20 rounded-full" /></TableCell>
                   <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
+                  <TableCell className="text-center"><Skeleton className="mx-auto h-8 w-8 rounded-md" /></TableCell>
                 </TableRow>
               ))
             ) : items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="py-8 text-center text-gray-400">
+                <TableCell colSpan={8} className="py-8 text-center text-gray-400">
                   Belum ada riwayat tugas.
                 </TableCell>
               </TableRow>
@@ -184,6 +188,17 @@ export default function TaskHistoryPage() {
                     </TableCell>
                     <TableCell className="hidden text-sm text-gray-500 md:table-cell">
                       {formatDateTime(req.completed_at)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        title="Lihat Detail"
+                        onClick={() => navigate(`/dashboard/task/${req.id}`)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

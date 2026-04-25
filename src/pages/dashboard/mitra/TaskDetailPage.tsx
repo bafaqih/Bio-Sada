@@ -227,6 +227,7 @@ export default function TaskDetailPage() {
 
   const statusConfig = STATUS_CONFIG[task.status];
   const isAccepted = task.status === 'accepted';
+  const isHistory = task.status === 'completed' || task.status === 'cancelled';
 
   return (
     <motion.div
@@ -363,16 +364,16 @@ export default function TaskDetailPage() {
                 <span className="text-gray-500">Diterima pada</span>
                 <span className="font-medium text-gray-800">{formatDateTime(task.accepted_at)}</span>
               </div>
-              {task.completed_at && (
+              {isHistory && (
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Selesai pada</span>
-                  <span className="font-medium text-emerald-700">{formatDateTime(task.completed_at)}</span>
+                  <span className="font-medium text-emerald-700">{formatDateTime(task.completed_at || task.updated_at)}</span>
                 </div>
               )}
               <div className="flex items-center justify-between pt-1">
                 <span className="text-gray-500">Status Tugas</span>
-                <Badge variant="secondary" className={statusConfig.className}>
-                  {statusConfig.label}
+                <Badge variant="secondary" className={isHistory ? STATUS_CONFIG.completed.className : statusConfig.className}>
+                  {isHistory ? 'Selesai' : statusConfig.label}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
