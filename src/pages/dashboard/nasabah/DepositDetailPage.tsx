@@ -157,7 +157,9 @@ export default function DepositDetailPage() {
   const statusConfig = STATUS_CONFIG[task.status];
   const isPending = task.status === 'pending';
   const isAccepted = task.status === 'accepted';
-  const isHistory = task.status === 'completed' || task.status === 'cancelled';
+  const isCompleted = task.status === 'completed';
+  const isCancelled = task.status === 'cancelled';
+  const isHistory = isCompleted || isCancelled;
 
   return (
     <motion.div
@@ -227,6 +229,16 @@ export default function DepositDetailPage() {
                       Hubungi Mitra
                     </a>
                   )}
+                </div>
+              ) : isCancelled ? (
+                <div className="flex flex-col items-center justify-center flex-1 py-4 text-center space-y-2">
+                  <div className="bg-red-50 p-3 rounded-full">
+                    <XCircle className="h-8 w-8 text-red-500" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-semibold text-red-800">Request Dibatalkan</p>
+                    <p className="text-xs text-red-600">Request ini telah dibatalkan dan tidak diproses.</p>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center flex-1 py-4 text-center space-y-3">
@@ -339,21 +351,27 @@ export default function DepositDetailPage() {
                 <span className="font-medium text-gray-800">
                   {task.accepted_at ? formatDateTime(task.accepted_at) : (
                     <span className="flex items-center gap-1 font-normal text-gray-500">
-                      <Hourglass className="h-3 w-3 animate-pulse text-amber-500" /> Menunggu...
+                      {isCancelled ? (
+                        '—'
+                      ) : (
+                        <><Hourglass className="h-3 w-3 animate-pulse text-amber-500" /> Menunggu...</>
+                      )}
                     </span>
                   )}
                 </span>
               </div>
               {isHistory && (
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Selesai pada</span>
-                  <span className="font-medium text-emerald-700">{formatDateTime(task.completed_at || task.updated_at)}</span>
+                  <span className="text-gray-500">{isCancelled ? 'Dibatalkan pada' : 'Selesai pada'}</span>
+                  <span className={`font-medium ${isCancelled ? 'text-red-700' : 'text-emerald-700'}`}>
+                    {formatDateTime(task.completed_at || task.updated_at)}
+                  </span>
                 </div>
               )}
               <div className="flex items-center justify-between pt-1">
                 <span className="text-gray-500">Status Request</span>
-                <Badge variant="secondary" className={isHistory ? STATUS_CONFIG.completed.className : statusConfig.className}>
-                  {isHistory ? 'Selesai' : statusConfig.label}
+                <Badge variant="secondary" className={statusConfig.className}>
+                  {statusConfig.label}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
@@ -363,7 +381,11 @@ export default function DepositDetailPage() {
                     <><BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> {task.partner.full_name}</>
                   ) : (
                     <span className="flex items-center gap-1 font-normal text-gray-500">
-                      <Hourglass className="h-3.5 w-3.5 text-amber-500 animate-pulse" /> Menunggu...
+                      {isCancelled ? (
+                        '—'
+                      ) : (
+                        <><Hourglass className="h-3.5 w-3.5 text-amber-500 animate-pulse" /> Menunggu...</>
+                      )}
                     </span>
                   )}
                 </span>
