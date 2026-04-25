@@ -5,7 +5,7 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  ArrowRight,
+  Eye,
 } from 'lucide-react';
 
 import { usePartnerList } from '@/hooks/useAdminUsers';
@@ -217,11 +217,12 @@ export default function PartnerManagementPage() {
                   <TableCell className="text-center">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => navigate(`/dashboard/management/partner/${partner.id}`)}
-                      className="h-7 gap-1 text-xs text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                      className="h-7 w-7 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                      title="Lihat Detail"
                     >
-                      Detail <ArrowRight className="h-3 w-3" />
+                      <Eye className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>

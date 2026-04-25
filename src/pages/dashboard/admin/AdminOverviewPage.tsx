@@ -6,8 +6,9 @@ import {
   Wallet,
   UserCheck,
   Package,
-  ArrowRight,
+  Eye,
   RefreshCw,
+  ArrowRight,
 } from 'lucide-react';
 
 import { useAdminStats, useUnverifiedPartnersPreview, usePendingRequestsPreview } from '@/hooks/useAdminStats';
@@ -237,11 +238,12 @@ export default function AdminOverviewPage() {
                     <TableCell className="text-center">
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => navigate(`/dashboard/management/partner/${partner.id}`)}
-                        className="h-7 gap-1 text-xs text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="h-7 w-7 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        title="Lihat Detail"
                       >
-                        Detail <ArrowRight className="h-3 w-3" />
+                        <Eye className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -330,11 +332,12 @@ export default function AdminOverviewPage() {
                     <TableCell className="text-center">
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => navigate(`/dashboard/transaction/${req.id}`)}
-                        className="h-7 gap-1 text-xs text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="h-7 w-7 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                        title="Lihat Detail"
                       >
-                        Detail <ArrowRight className="h-3 w-3" />
+                        <Eye className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>

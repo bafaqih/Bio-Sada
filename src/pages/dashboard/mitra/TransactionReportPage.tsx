@@ -324,7 +324,7 @@ export default function TransactionReportPage() {
         <Button
           id="btn-download-excel"
           onClick={() => setDownloadOpen(true)}
-          className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 font-semibold text-white shadow-md shadow-emerald-500/20 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
+          className="gap-2 bg-linear-to-r from-emerald-500 to-teal-600 font-semibold text-white shadow-md shadow-emerald-500/20 transition-all hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-500/30"
         >
           <Download className="h-4 w-4" />
           Download Excel
@@ -374,7 +374,7 @@ export default function TransactionReportPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-teal-50/50 p-4 shadow-sm"
+          className="rounded-xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-teal-50/50 p-4 shadow-sm"
         >
           <p className="text-xs font-medium text-emerald-600/70">Total Transaksi</p>
           <p className="mt-1 text-2xl font-bold text-emerald-700">{summary.uniqueRequests}</p>
@@ -384,7 +384,7 @@ export default function TransactionReportPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15 }}
-          className="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50/50 p-4 shadow-sm"
+          className="rounded-xl border border-blue-100 bg-linear-to-br from-blue-50 to-indigo-50/50 p-4 shadow-sm"
         >
           <p className="text-xs font-medium text-blue-600/70">Total Berat</p>
           <p className="mt-1 text-2xl font-bold text-blue-700">
@@ -396,7 +396,7 @@ export default function TransactionReportPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="rounded-xl border border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50/50 p-4 shadow-sm"
+          className="rounded-xl border border-amber-100 bg-linear-to-br from-amber-50 to-orange-50/50 p-4 shadow-sm"
         >
           <p className="text-xs font-medium text-amber-600/70">Total Pendapatan</p>
           <p className="mt-1 text-2xl font-bold text-amber-700">{formatCurrency(summary.totalRevenue)}</p>
@@ -611,7 +611,7 @@ export default function TransactionReportPage() {
                   id="btn-confirm-download"
                   onClick={handleDownload}
                   disabled={dlDisabled}
-                  className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 font-semibold text-white shadow-md shadow-emerald-500/20 hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50"
+                  className="gap-2 bg-linear-to-r from-emerald-500 to-teal-600 font-semibold text-white shadow-md shadow-emerald-500/20 hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50"
                 >
                   {downloading ? (
                     <>

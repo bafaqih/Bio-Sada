@@ -437,7 +437,7 @@ export default function DepositRequestPage() {
                 type="submit"
                 disabled={isSubmitting}
                 size="lg"
-                className="h-12 bg-gradient-to-r from-emerald-500 to-teal-600 px-8 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-60"
+                className="h-12 bg-linear-to-r from-emerald-500 to-teal-600 px-8 text-base font-semibold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <><Loader2 className="h-5 w-5 animate-spin" /> Mengirim...</>

@@ -208,11 +208,13 @@ export default function ActiveTasksPage() {
                         <XCircle className="h-3.5 w-3.5" /> Batal
                       </Button>
                       <Button
-                        size="sm"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => navigate(`/dashboard/task/${task.id}`)}
-                        className="h-9 flex-2 gap-1.5 bg-linear-to-r from-emerald-500 to-teal-600 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-95 transition-all rounded-lg"
+                        className="h-9 w-9 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all rounded-lg"
+                        title="Lihat Detail"
                       >
-                        <Eye className="h-4 w-4" /> Lihat Detail
+                        <Eye className="h-4 w-4" />
                       </Button>
                     </div>
                   </CardContent>
