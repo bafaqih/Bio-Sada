@@ -101,6 +101,7 @@ export interface PartnerStats {
 
 export interface PickupRequestWithDetails extends PickupRequest {
   customer?: Pick<Profile, 'full_name' | 'phone_number' | 'avatar_url'>;
+  partner?: Pick<Profile, 'full_name' | 'phone_number' | 'avatar_url'>;
   address?: Pick<Address, 'address_detail' | 'city' | 'latitude' | 'longitude'>;
   items?: PickupRequestItem[];
 }

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, XCircle, History } from 'lucide-react';
+import { ChevronLeft, ChevronRight, XCircle, History, Eye } from 'lucide-react';
 
 import { useAuthStore } from '@/stores/authStore';
 import { usePickupRequests, useCancelPickupRequest } from '@/hooks/usePickupRequests';
@@ -59,6 +60,7 @@ const PAGE_SIZE_OPTIONS: { value: string; label: string }[] = [
  * with colored status badges and cancel action for pending requests.
  */
 export default function DepositHistoryPage() {
+  const navigate = useNavigate();
   const { profile } = useAuthStore();
   const [pageSize, setPageSize] = useState<PageSizeOption>(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -197,45 +199,73 @@ export default function DepositHistoryPage() {
                         {status.label}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {req.status === 'pending' ? (
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              disabled={cancelRequest.isPending}
-                              className="h-7 gap-1 text-xs text-red-500 hover:bg-red-50 hover:text-red-700"
-                            >
-                              <XCircle className="h-3.5 w-3.5" />
-                              Batalkan
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Membatalkan Request</DialogTitle>
-                              <DialogDescription>
-                                Apakah Anda yakin ingin membatalkan request penjemputan ini? Tindakan ini tidak dapat diurungkan.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Kembali</Button>
-                              </DialogClose>
-                              <DialogClose asChild>
-                                <Button
-                                  variant="destructive"
-                                  onClick={() => handleCancel(req.id)}
-                                >
-                                  Ya, Batalkan
-                                </Button>
-                              </DialogClose>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      ) : (
-                        <span className="text-xs text-gray-300">—</span>
-                      )}
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-1">
+                        {req.status === 'pending' ? (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={cancelRequest.isPending}
+                                className="h-7 w-7 text-red-500 hover:bg-red-50 hover:text-red-700"
+                                title="Batalkan Request"
+                              >
+                                <XCircle className="h-3.5 w-3.5" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Membatalkan Request</DialogTitle>
+                                <DialogDescription>
+                                  Apakah Anda yakin ingin membatalkan request penjemputan ini? Tindakan ini tidak dapat diurungkan.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button variant="outline">Kembali</Button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <Button
+                                    variant="destructive"
+                                    onClick={() => handleCancel(req.id)}
+                                  >
+                                    Ya, Batalkan
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-gray-300 cursor-default hover:bg-transparent hover:text-gray-300"
+                            onClick={() => {
+                              if (req.status === 'accepted') {
+                                toast.info('Permintaan tidak dapat dibatalkan karena sudah diterima oleh mitra.');
+                              } else if (req.status === 'completed') {
+                                toast.info('Permintaan sudah selesai diproses.');
+                              } else if (req.status === 'cancelled') {
+                                toast.info('Permintaan ini sudah dibatalkan.');
+                              }
+                            }}
+                            title="Tidak dapat dibatalkan"
+                          >
+                            <XCircle className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 w-7 p-0 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                          title="Lihat Detail"
+                          onClick={() => navigate(`/dashboard/deposit/${req.id}`)}
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );

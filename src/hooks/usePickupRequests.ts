@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { PickupRequest, DepositFormItem } from '@/lib/types';
+import type { PickupRequest, DepositFormItem, PickupRequestWithDetails, PickupRequestItem } from '@/lib/types';
 
 // ── Query: Paginated pickup requests for a customer ─────────
 
@@ -50,6 +50,45 @@ export function usePickupRequests({ customerId, page, pageSize }: UsePickupReque
       };
     },
     enabled: !!customerId,
+  });
+}
+ 
+// ── Query: Single deposit detail for customer ────────────────
+ 
+export function useDepositDetail(requestId: string | undefined) {
+  return useQuery<PickupRequestWithDetails | null>({
+    queryKey: ['deposit-detail', requestId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('pickup_requests')
+        .select(`
+          *,
+          customer:public_profiles!pickup_requests_customers_id_fkey(full_name, phone_number, avatar_url),
+          partner:public_profiles!pickup_requests_partners_id_fkey(full_name, phone_number, avatar_url),
+          address:addresses!pickup_requests_address_id_fkey(address_detail, city, latitude, longitude)
+        `)
+        .eq('id', requestId!)
+        .single();
+ 
+      if (error) throw error;
+ 
+      // Fetch items
+      const { data: items, error: itemsError } = await supabase
+        .from('pickup_request_items')
+        .select('*, waste_categories(name, unit)')
+        .eq('request_id', requestId!);
+ 
+      if (itemsError) throw itemsError;
+ 
+      return {
+        ...data,
+        customer: data.customer ?? undefined,
+        partner: data.partner ?? undefined,
+        address: data.address ?? undefined,
+        items: (items ?? []) as PickupRequestItem[],
+      } as PickupRequestWithDetails;
+    },
+    enabled: !!requestId,
   });
 }
 

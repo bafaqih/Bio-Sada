@@ -21,6 +21,7 @@ import DashboardHome from '@/pages/dashboard/DashboardHome';
 import WasteListPage from '@/pages/dashboard/nasabah/WasteListPage';
 import DepositRequestPage from '@/pages/dashboard/nasabah/DepositRequestPage';
 import DepositHistoryPage from '@/pages/dashboard/nasabah/DepositHistoryPage';
+import DepositDetailPage from '@/pages/dashboard/nasabah/DepositDetailPage';
 import ProfilePage from '@/pages/dashboard/nasabah/ProfilePage';
 
 // Mitra pages
@@ -97,6 +98,7 @@ function AppRoutes() {
             {/* Customer-specific routes */}
             <Route path="/dashboard/deposit/request" element={<DepositRequestPage />} />
             <Route path="/dashboard/deposit/history" element={<DepositHistoryPage />} />
+            <Route path="/dashboard/deposit/:id" element={<DepositDetailPage />} />
 
             {/* Partner-specific routes */}
             <Route path="/dashboard/task/active" element={<ActiveTasksPage />} />
