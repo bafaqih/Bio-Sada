@@ -58,10 +58,11 @@ const STATUS_CONFIG: Record<RequestStatus, { label: string; className: string }>
 function getInitials(name: string): string {
   return name
     .split(' ')
+    .filter(w => /^[a-zA-Z]/.test(w)) // Only take words starting with letters
     .map((w) => w[0])
     .join('')
     .toUpperCase()
-    .slice(0, 2);
+    .slice(0, 2) || name[0]?.toUpperCase() || '?';
 }
 
 const formatCurrency = (num: number | null) => {
@@ -183,88 +184,109 @@ export default function DepositDetailPage() {
         </div>
       </div>
 
-      {/* Section 1: Partner Info + Actions (If accepted/completed) */}
-      <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
-        <CardContent className="p-5">
-          <h3 className="text-base font-semibold text-gray-800 mb-4">Profil Mitra Pengepul</h3>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            {task.partner ? (
-              <>
-                {/* Partner info */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-12 w-12 border border-emerald-200">
-                      <AvatarImage src={task.partner.avatar_url ?? undefined} alt={task.partner.full_name} />
-                      <AvatarFallback className="bg-emerald-100 text-emerald-600 font-semibold">
-                        {getInitials(task.partner.full_name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h2 className="text-lg font-bold leading-none text-gray-900">{task.partner.full_name}</h2>
-                      <div className="mt-1.5 flex items-center gap-1 text-sm text-gray-500">
+      {/* Section 1: Partner Info & Pickup Schedule */}
+      <div className="grid gap-4 md:grid-cols-2">
+        {/* Card 1: Partner Profile */}
+        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardContent className="p-5 h-full flex flex-col">
+            <h3 className="text-base font-semibold text-gray-800 mb-4">Profil Mitra Pengepul</h3>
+            <div className="flex-1">
+              {task.partner ? (
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                  {/* Partner info */}
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <Avatar className="h-16 w-16 border-2 border-emerald-100 shadow-sm">
+                        <AvatarImage src={task.partner.avatar_url ?? undefined} alt={task.partner.full_name} className="object-cover" />
+                        <AvatarFallback className="bg-emerald-50 text-emerald-600 font-bold text-xl">
+                          {getInitials(task.partner.full_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="absolute -bottom-1 -right-1 rounded-full bg-white p-1 shadow-sm">
+                        <BadgeCheck className="h-5 w-5 text-emerald-500" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h2 className="text-xl font-bold text-gray-900 tracking-tight">{task.partner.full_name}</h2>
+                      <div className="flex items-center gap-2 text-emerald-600 font-medium bg-emerald-50 w-fit px-3 py-1 rounded-full text-sm">
                         <Phone className="h-3.5 w-3.5" />
-                        +{task.partner.phone_number ?? '-'}
+                        <span>+{task.partner.phone_number ?? '-'}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-2 text-sm text-gray-600">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-                    <span>
-                      {task.address?.address_detail ?? '-'}{task.address?.city ? `, ${task.address.city}` : ''}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col gap-1.5 text-sm">
-                    <span className="text-gray-500">Tanggal & Waktu Jemput</span>
-                    <div className="flex flex-wrap items-center gap-4 font-medium text-gray-800">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-emerald-500" /> {formatDate(task.pickup_date)}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5 text-emerald-500" /> {task.pickup_time}
-                      </span>
-                    </div>
-                  </div>
+                  {/* WhatsApp button */}
+                  {(isAccepted || task.status === 'completed') && (
+                    <a
+                      href={getWhatsAppLink()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-10 items-center gap-2 rounded-lg bg-linear-to-r from-green-500 to-green-600 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:from-green-600 hover:to-green-700 hover:shadow-md"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Hubungi Mitra
+                    </a>
+                  )}
                 </div>
-
-                {/* WhatsApp button */}
-                {(isAccepted || task.status === 'completed') && (
-                  <a
-                    href={getWhatsAppLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-10 items-center gap-2 rounded-lg bg-linear-to-r from-green-500 to-green-600 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:from-green-600 hover:to-green-700 hover:shadow-md"
+              ) : (
+                <div className="flex flex-col items-center justify-center flex-1 py-4 text-center space-y-3">
+                  <motion.div
+                    animate={{ rotate: [0, -10, 10, -10, 10, 0], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="bg-amber-100 p-3 rounded-full"
                   >
-                    <MessageCircle className="h-4 w-4" /> Hubungi Mitra
-                  </a>
-                )}
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-6 w-full text-center space-y-3">
-                <motion.div
-                  animate={{ 
-                    rotate: [0, -10, 10, -10, 10, 0],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="bg-amber-100 p-3 rounded-full"
-                >
-                  <Hourglass className="h-8 w-8 text-amber-600" />
-                </motion.div>
+                    <Hourglass className="h-8 w-8 text-amber-600" />
+                  </motion.div>
+                  <p className="text-sm font-semibold text-amber-800">Mencari mitra terdekat...</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Card 2: Pickup Schedule & Location */}
+        <Card className="border-gray-100 bg-white/80 shadow-sm backdrop-blur-sm">
+          <CardContent className="p-5 h-full">
+            <h3 className="text-base font-semibold text-gray-800 mb-4">Lokasi & Jadwal Jemput</h3>
+            <div className="space-y-4">
+              {/* Location */}
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 rounded-full bg-emerald-50 p-2 text-emerald-600">
+                  <MapPin className="h-4 w-4" />
+                </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-semibold text-amber-800">Masih mencari mitra terdekat...</p>
-                  <p className="text-xs text-amber-600">Belum ada mitra yang mengambil request Anda nih.</p>
+                  <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Lokasi Penjemputan</span>
+                  <p className="text-sm font-medium text-gray-700 leading-relaxed">
+                    {task.address?.address_detail ?? '-'}{task.address?.city ? `, ${task.address.city}` : ''}
+                  </p>
                 </div>
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+
+              {/* Schedule */}
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-50 mt-2">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 rounded-full bg-emerald-50 p-2 text-emerald-600">
+                    <Calendar className="h-4 w-4" />
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Tanggal</span>
+                    <p className="text-sm font-semibold text-gray-800">{formatDate(task.pickup_date)}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 rounded-full bg-emerald-50 p-2 text-emerald-600">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Jam</span>
+                    <p className="text-sm font-semibold text-gray-800">{task.pickup_time}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Section 2: Meta Info (accepted_at, photo, notes) */}
       <div className="grid gap-4 sm:grid-cols-2">
