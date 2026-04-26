@@ -125,9 +125,9 @@ export default function ActiveTasksPage() {
             return (
               <motion.div key={task.id} variants={cardVariants}>
                 <Card className="group relative overflow-hidden border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <CardContent className="px-6 py-4">
+                  <CardContent className="px-5 py-3">
                     {/* Header: Customer & Status */}
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-2.5">
                       <div className="flex items-center gap-3">
                         {task.customer?.avatar_url ? (
                           <img 
@@ -155,7 +155,7 @@ export default function ActiveTasksPage() {
                     </div>
 
                     {/* Address Section */}
-                    <div className="mb-4 rounded-xl bg-gray-50 p-2.5 transition-colors group-hover:bg-emerald-50/30">
+                    <div className="mb-3.5 rounded-xl bg-gray-50 p-2.5 transition-colors group-hover:bg-emerald-50/30">
                       <div className="flex items-start gap-2 text-xs leading-relaxed text-gray-600">
                         <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
                         <span className="line-clamp-2">
@@ -165,7 +165,7 @@ export default function ActiveTasksPage() {
                     </div>
 
                     {/* Stats Row */}
-                    <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="grid grid-cols-3 gap-2 mb-3.5">
                       <div className="flex flex-col items-center justify-center rounded-lg border border-gray-100 bg-white p-2 text-center shadow-sm">
                         <Package className="mb-1 h-3.5 w-3.5 text-amber-500" />
                         <span className="text-[10px] font-medium text-gray-400 uppercase">Berat</span>
@@ -184,7 +184,7 @@ export default function ActiveTasksPage() {
                     </div>
 
                     {/* Categories Tagline */}
-                    <div className="flex flex-wrap gap-1.5 mb-5">
+                    <div className="flex flex-wrap gap-1.5 mb-4">
                       {categories.slice(0, 2).map((cat, i) => (
                         <Badge key={i} variant="secondary" className="h-5 bg-emerald-50/80 text-emerald-700 text-[10px] font-medium hover:bg-emerald-100 transition-colors">
                           {cat}
@@ -209,12 +209,11 @@ export default function ActiveTasksPage() {
                       </Button>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={() => navigate(`/dashboard/task/${task.id}`)}
-                        className="h-9 w-9 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all rounded-lg"
-                        title="Lihat Detail"
+                        className="h-9 flex-1 gap-1.5 text-xs text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all rounded-lg"
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-4 w-4" /> Lihat Detail
                       </Button>
                     </div>
                   </CardContent>
