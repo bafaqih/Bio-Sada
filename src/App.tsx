@@ -1,44 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/stores/authStore';
 
-// Auth pages
+// Infrastructure & Layout (Static)
+import ProtectedRoute from '@/components/shared/ProtectedRoute';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import LoadingScreen from '@/components/shared/LoadingScreen';
+
+// Auth & Public pages (Static - No loading flash)
+import LandingPage from '@/pages/landingpage/LandingPage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
 import NewPasswordPage from '@/pages/auth/NewPasswordPage';
-import LandingPage from '@/pages/landingpage/LandingPage';
 
-// Dashboard infrastructure
-import ProtectedRoute from '@/components/shared/ProtectedRoute';
-import DashboardLayout from '@/components/layout/DashboardLayout';
-import DashboardHome from '@/pages/dashboard/DashboardHome';
+// Dashboard pages (Lazy loaded - Loaded once when entering dashboard)
+const DashboardHome = lazy(() => import('@/pages/dashboard/DashboardHome'));
 
 // Nasabah pages
-import WasteListPage from '@/pages/dashboard/nasabah/WasteListPage';
-import DepositRequestPage from '@/pages/dashboard/nasabah/DepositRequestPage';
-import DepositHistoryPage from '@/pages/dashboard/nasabah/DepositHistoryPage';
-import DepositDetailPage from '@/pages/dashboard/nasabah/DepositDetailPage';
-import ProfilePage from '@/pages/dashboard/nasabah/ProfilePage';
+const WasteListPage = lazy(() => import('@/pages/dashboard/nasabah/WasteListPage'));
+const DepositRequestPage = lazy(() => import('@/pages/dashboard/nasabah/DepositRequestPage'));
+const DepositHistoryPage = lazy(() => import('@/pages/dashboard/nasabah/DepositHistoryPage'));
+const DepositDetailPage = lazy(() => import('@/pages/dashboard/nasabah/DepositDetailPage'));
+const ProfilePage = lazy(() => import('@/pages/dashboard/nasabah/ProfilePage'));
 
 // Mitra pages
-import ActiveTasksPage from '@/pages/dashboard/mitra/ActiveTasksPage';
-import TaskDetailPage from '@/pages/dashboard/mitra/TaskDetailPage';
-import TaskHistoryPage from '@/pages/dashboard/mitra/TaskHistoryPage';
-import TransactionReportPage from '@/pages/dashboard/mitra/TransactionReportPage';
+const ActiveTasksPage = lazy(() => import('@/pages/dashboard/mitra/ActiveTasksPage'));
+const TaskDetailPage = lazy(() => import('@/pages/dashboard/mitra/TaskDetailPage'));
+const TaskHistoryPage = lazy(() => import('@/pages/dashboard/mitra/TaskHistoryPage'));
+const TransactionReportPage = lazy(() => import('@/pages/dashboard/mitra/TransactionReportPage'));
 
 // Admin pages
-import AdminWasteListPage from '@/pages/dashboard/admin/AdminWasteListPage';
-import PartnerManagementPage from '@/pages/dashboard/admin/PartnerManagementPage';
-import PartnerDetailPage from '@/pages/dashboard/admin/PartnerDetailPage';
-import CustomerManagementPage from '@/pages/dashboard/admin/CustomerManagementPage';
-import CustomerDetailPage from '@/pages/dashboard/admin/CustomerDetailPage';
-import TransactionLogsPage from '@/pages/dashboard/admin/TransactionLogsPage';
-import TransactionDetailPage from '@/pages/dashboard/admin/TransactionDetailPage';
-import NotFoundPage from '@/pages/error/NotFoundPage';
+const AdminWasteListPage = lazy(() => import('@/pages/dashboard/admin/AdminWasteListPage'));
+const PartnerManagementPage = lazy(() => import('@/pages/dashboard/admin/PartnerManagementPage'));
+const PartnerDetailPage = lazy(() => import('@/pages/dashboard/admin/PartnerDetailPage'));
+const CustomerManagementPage = lazy(() => import('@/pages/dashboard/admin/CustomerManagementPage'));
+const CustomerDetailPage = lazy(() => import('@/pages/dashboard/admin/CustomerDetailPage'));
+const TransactionLogsPage = lazy(() => import('@/pages/dashboard/admin/TransactionLogsPage'));
+const TransactionDetailPage = lazy(() => import('@/pages/dashboard/admin/TransactionDetailPage'));
+const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // ── Query Client ─────────────────────────────────────────────
 
@@ -78,20 +81,24 @@ function AppRoutes() {
       <Toaster position="top-center" richColors />
 
       <Routes>
-        {/* Public routes */}
+        {/* Public routes (Static - Instant) */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/password/reset" element={<ResetPasswordPage />} />
         <Route path="/password/new" element={<NewPasswordPage />} />
 
-        {/* Protected dashboard routes — all authenticated roles */}
+        {/* Protected dashboard routes — Lazy loaded as a bundle with LoadingScreen */}
         <Route element={<ProtectedRoute allowedRoles={['admin', 'partners', 'customers']} />}>
-          <Route element={<DashboardLayout />}>
-            {/* Shared dashboard home (shows role-specific content) */}
+          <Route element={
+            <Suspense fallback={<LoadingScreen />}>
+              <DashboardLayout />
+            </Suspense>
+          }>
+            {/* Shared dashboard home */}
             <Route path="/dashboard" element={<DashboardHome />} />
 
-            {/* Shared routes (accessible by all roles) */}
+            {/* Shared routes */}
             <Route path="/dashboard/waste-list" element={<WasteListRouteWrapper />} />
             <Route path="/dashboard/profile" element={<ProfilePage />} />
 
@@ -112,7 +119,11 @@ function AppRoutes() {
 
         {/* Admin-only routes */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-          <Route element={<DashboardLayout />}>
+          <Route element={
+            <Suspense fallback={<LoadingScreen />}>
+              <DashboardLayout />
+            </Suspense>
+          }>
             <Route path="/dashboard/management/partner" element={<PartnerManagementPage />} />
             <Route path="/dashboard/management/partner/:id" element={<PartnerDetailPage />} />
             <Route path="/dashboard/management/customer" element={<CustomerManagementPage />} />

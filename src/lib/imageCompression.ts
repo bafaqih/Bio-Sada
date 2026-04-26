@@ -10,8 +10,6 @@ export const compressImage = async (file: File) => {
 
     try {
         const compressedFile = await imageCompression(file, options);
-        console.log(`Size sebelum: ${file.size / 1024 / 1024} MB`);
-        console.log(`Size sesudah: ${compressedFile.size / 1024 / 1024} MB`);
 
         return compressedFile;
     } catch (error) {

@@ -84,7 +84,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         const now = Math.floor(Date.now() / 1000);
         
         if (expiresAt < now) {
-          console.log('[authStore] Session expired, logging out...');
           toast.error('Sesi Anda telah habis, harap masuk kembali.');
           await get().logout();
         } else {

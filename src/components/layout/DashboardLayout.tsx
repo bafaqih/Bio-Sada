@@ -259,6 +259,45 @@ function DashboardLayoutContent() {
     return 'Dashboard';
   };
 
+  // ── Prefetch Dashboard Pages ──────────────────────────────
+  // We prefetch all dashboard page chunks in the background 
+  // after the layout mounts. This makes sub-navigation instant.
+  useEffect(() => {
+    const prefetch = () => {
+      // Common
+      import('@/pages/dashboard/DashboardHome');
+      import('@/pages/dashboard/nasabah/WasteListPage');
+      import('@/pages/dashboard/nasabah/ProfilePage');
+      
+      // Nasabah
+      import('@/pages/dashboard/nasabah/DepositRequestPage');
+      import('@/pages/dashboard/nasabah/DepositHistoryPage');
+      import('@/pages/dashboard/nasabah/DepositDetailPage');
+      
+      // Mitra
+      import('@/pages/dashboard/mitra/ActiveTasksPage');
+      import('@/pages/dashboard/mitra/TaskDetailPage');
+      import('@/pages/dashboard/mitra/TaskHistoryPage');
+      import('@/pages/dashboard/mitra/TransactionReportPage');
+      
+      // Admin
+      import('@/pages/dashboard/admin/AdminWasteListPage');
+      import('@/pages/dashboard/admin/PartnerManagementPage');
+      import('@/pages/dashboard/admin/PartnerDetailPage');
+      import('@/pages/dashboard/admin/CustomerManagementPage');
+      import('@/pages/dashboard/admin/CustomerDetailPage');
+      import('@/pages/dashboard/admin/TransactionLogsPage');
+      import('@/pages/dashboard/admin/TransactionDetailPage');
+      
+      // Error
+      import('@/pages/error/NotFoundPage');
+    };
+
+    // Small delay to ensure the current page renders first
+    const timer = setTimeout(prefetch, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <SidebarMobileCloser />
