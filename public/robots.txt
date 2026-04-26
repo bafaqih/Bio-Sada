@@ -5,5 +5,5 @@ Allow: /
 Disallow: /dashboard/
 
 # Host and Sitemap
-Host: https://bio-sada.com
-Sitemap: https://bio-sada.com/sitemap.xml
+Host: https://bio-sada.web.id
+Sitemap: https://bio-sada.web.id/sitemap.xml

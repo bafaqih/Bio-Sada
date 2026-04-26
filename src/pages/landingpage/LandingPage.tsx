@@ -25,12 +25,12 @@ export default function LandingPage() {
           content="Bio-Sada adalah platform bank sampah digital yang memudahkan masyarakat untuk mengelola sampah dan mendapatkan penghasilan tambahan. Layanan penjemputan sampah langsung ke rumah Anda."
         />
         <meta name="keywords" content="bank sampah, sampah digital, recycling, daur ulang, Malang, Bio-Sada, pengepul sampah" />
-        <link rel="canonical" href="https://bio-sada.com/" />
+        <link rel="canonical" href="https://bio-sada.web.id/" />
         <meta property="og:title" content="Bio-Sada | Bank Sampah Digital" />
         <meta property="og:description" content="Ubah sampahmu jadi cuan! ♻️ Gabung di Bio-Sada, platform bank sampah digital yang praktis dengan layanan penjemputan langsung ke rumahmu." />
         <meta property="og:image" content="/og-image.png" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://bio-sada.com/" />
+        <meta property="og:url" content="https://bio-sada.web.id/" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="/og-image.png" />
       </Helmet>
