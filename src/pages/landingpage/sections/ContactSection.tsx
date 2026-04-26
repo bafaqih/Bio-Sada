@@ -4,14 +4,14 @@ import { MapPin, Phone, Mail, MessageSquare } from 'lucide-react';
 
 const CONTACT_INFO = [
   { icon: Phone, label: 'WhatsApp', value: '+62 821-1831-2630', href: 'https://wa.me/6282118312630' },
-  { icon: Mail, label: 'Email', value: 'biosadacom@gmail.com', href: 'mailto:biosadacom@gmail.com' },
+  { icon: Mail, label: 'Email', value: 'halo@bio-sada.web.id', href: 'mailto:halo@bio-sada.web.id' },
   { icon: MapPin, label: 'Alamat', value: 'Universitas Negeri Malang, Jl. Cakrawala No.5, Sumbersari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145', href: null },
 ];
 
 const SOCIALS = [
-  { 
-    label: 'Instagram', 
-    href: 'https://instagram.com/biosadaofficial', 
+  {
+    label: 'Instagram',
+    href: 'https://instagram.com/biosadaofficial',
     icon: (props: any) => (
       <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -20,27 +20,27 @@ const SOCIALS = [
       </svg>
     )
   },
-  { 
-    label: 'TikTok', 
-    href: 'https://tiktok.com/@biosadaofficial', 
+  {
+    label: 'TikTok',
+    href: 'https://tiktok.com/@biosadaofficial',
     icon: (props: any) => (
       <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
       </svg>
     )
   },
-  { 
-    label: 'Facebook', 
-    href: 'https://facebook.com/biosadaofficial', 
+  {
+    label: 'Facebook',
+    href: 'https://facebook.com/biosadaofficial',
     icon: (props: any) => (
       <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
       </svg>
     )
   },
-  { 
-    label: 'X (Twitter)', 
-    href: 'https://x.com/biosadaofficial', 
+  {
+    label: 'X (Twitter)',
+    href: 'https://x.com/biosadaofficial',
     icon: (props: any) => (
       <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4l11.733 16h4.267l-11.733-16z" />
@@ -85,7 +85,7 @@ export default function ContactSection() {
           >
             <iframe
               title="Lokasi Bio-Sada"
-              src="https://www.google.com/maps?q=Universitas+Negeri+Malang,+Jl.+Cakrawala+No.5,+Sumbersari,+Kec.+Lowokwaru,+Kota+Malang,+Jawa+Timur+65145&output=embed" 
+              src="https://www.google.com/maps?q=Universitas+Negeri+Malang,+Jl.+Cakrawala+No.5,+Sumbersari,+Kec.+Lowokwaru,+Kota+Malang,+Jawa+Timur+65145&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, display: 'block' }}
